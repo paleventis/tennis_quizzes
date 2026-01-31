@@ -1,0 +1,572 @@
+<!-- 
+  Mental Approach Quiz App (quadrilingual)
+  Source document (local path): /mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png
+  Paste this file as mental_quiz.html and host it on any static host.
+-->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Test Mental Tennis — Quadrilingue</title>
+<style>
+
+.home-btn{
+  margin-left:auto;
+  margin-right:8px;
+  text-decoration:none;
+  font-size:18px;
+  background:#fff;
+  border:1px solid rgba(122,79,255,.2);
+  color:var(--accent);
+  padding:8px 10px;
+  border-radius:10px;
+  font-weight:700;
+  transition:.15s ease;
+}
+.home-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(122,79,255,.25);
+}
+
+
+
+
+
+
+
+
+  :root{
+    --bg:#f3f6fb; --card:#ffffff; --muted:#6b7280; --accent:#7a4fff;
+    --green:#16a34a; --red:#ef4444; --purple:#6a37d8;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;}
+  body{
+    margin:0; background:linear-gradient(180deg,#eaf4ff,#f3f6fb);
+    color:#0b1224; display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .container{width:100%;max-width:980px;background:var(--card);border-radius:14px;box-shadow:0 10px 40px rgba(2,6,23,0.08);overflow:hidden;}
+  header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(11,17,36,0.04)}
+  .logo{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,#fff,#f3f6fb);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);font-size:20px}
+  h1{margin:0;font-size:18px}
+  .lang{margin-left:auto;display:flex;gap:8px}
+  .flag-btn{background:none;border:0;cursor:pointer;font-size:20px;padding:6px;border-radius:8px}
+  main{display:flex;gap:16px;padding:18px}
+  .left{flex:1;min-width:320px}
+  .card{background:#fff;border-radius:12px;padding:14px;border:1px solid rgba(11,17,36,0.04)}
+  .intro p{color:var(--muted);margin:8px 0 0}
+  .question-number{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .question-text{font-size:18px;margin:6px 0 14px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{border:1px solid rgba(11,17,36,0.06);padding:12px;border-radius:10px;cursor:pointer;background:#fbfdff;transition:all .12s;display:flex;align-items:center;justify-content:space-between}
+  .choice:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+  .choice.selected{background:linear-gradient(180deg,#f1e9ff,#efe6ff);border-color:rgba(106,55,216,0.18)}
+  .choice.correct{background:linear-gradient(180deg,#e9f8ec,#d6f1d9);border-color:rgba(22,163,74,0.14)}
+  .choice.wrong{background:linear-gradient(180deg,#ffecec,#ffd6d6);border-color:rgba(239,68,68,0.12)}
+  .choice .label{font-weight:600}
+  .choice .meta{font-size:14px;color:var(--muted)}
+  .footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(122,79,255,0.12)}
+  .progress{height:10px;background:#f0f4fb;border-radius:999px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#5e32c8);width:0%}
+  .results .score{font-size:28px;font-weight:800;color:var(--accent)}
+  .small{font-size:13px;color:var(--muted)}
+  footer{padding:10px 18px;color:var(--muted);font-size:13px;text-align:center}
+  .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7}
+  .review-opt{padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+  .sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid #b08cff}
+  .corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid #8dd39a}
+  .wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid #f19b9b}
+  .explain{font-size:14px;color:#0b1224;margin-top:8px;padding-left:6px}
+  .source{font-size:12px;color:var(--muted);margin-top:8px}
+  @media (max-width:900px){ main{flex-direction:column} .lang{margin-left:0} }
+</style>
+</head>
+<body>
+<div class="container" role="application" aria-label="Mental Tennis Quiz">
+  <header><a id="homeBtn" href="../../index.html" class="home-btn" title="Home">🏠</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="logo">MT</div>
+      <div>
+        <h1 id="mainTitle">Test Mental — Tennis</h1>
+        <div id="subtitle" class="small">Concentration & état d'esprit</div>
+      </div>
+    </div>
+
+    <div class="lang" aria-label="language selector">
+      <button class="flag-btn" data-lang="fr">🇫🇷</button>
+      <button class="flag-btn" data-lang="en">🇬🇧</button>
+      <button class="flag-btn" data-lang="de">🇩🇪</button>
+      <button class="flag-btn" data-lang="nl">🇳🇱</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="left">
+      <div id="introCard" class="card intro">
+        <div id="titleLine"><strong id="titlePart">L’Art de la Concentration — </strong><span id="titleSub">Mental Tennis</span></div>
+        <p id="lead" class="small">Questions basées sur le document "L'Art de la Concentration dans le Tennis" (Inner Game)</p>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button id="startBtn" class="btn">Commencer</button>
+          <button id="guideBtn" class="btn secondary">Guide</button>
+        </div>
+        <div class="source">Source (local file) : <a href="/mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png" target="_blank">/mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png</a></div>
+      </div>
+
+      <div id="quizCard" class="card" style="display:none;margin-top:12px">
+        <div class="question-number" id="qNum">Question 1 / 20</div>
+        <div class="question-text" id="qText">...</div>
+        <div class="choices" id="choices"></div>
+
+        <div class="footer">
+          <div style="flex:1">
+            <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="prevBtn" class="btn secondary" disabled>Précédent</button>
+            <button id="nextBtn" class="btn">Suivant</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultCard" class="card" style="display:none;margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small" id="resLabel">Ton score</div>
+            <div class="score" id="scoreText">0 / 20</div>
+          </div>
+          <div id="levelInfo" style="text-align:right"></div>
+        </div>
+        <div id="feedback" style="margin-top:12px;color:#0b1224"></div>
+
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button id="retakeBtn" class="btn">Recommencer (nouveau 20)</button>
+          <button id="reviewBtn" class="btn secondary">Voir réponses corrigées</button>
+          <button id="exportBtn" class="btn secondary">Exporter CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right" style="width:320px;min-width:220px">
+      <div class="card">
+        <h3 id="panelTitle">Comment ça marche</h3>
+        <p id="panelText" class="small">20 questions aléatoires issues d'un pool de 100, générées depuis le document reçu.</p>
+        <hr />
+        <div style="margin-top:8px">
+          <div class="small"><strong>Légende</strong></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:8px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--purple)"></div><div class="small">Ta réponse sélectionnée</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--green)"></div><div class="small">Réponse correcte</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--red)"></div><div class="small">Mauvaise réponse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="small"><strong>Langue</strong></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="flag-btn" data-lang="fr">🇫🇷 Français</button>
+          <button class="flag-btn" data-lang="en">🇬🇧 English</button>
+          <button class="flag-btn" data-lang="de">🇩🇪 Deutsch</button>
+          <button class="flag-btn" data-lang="nl">🇳🇱 Nederlands</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© Coach Panos Lev — Mental Tennis Quiz</footer>
+</div>
+
+<script>
+/* -------------------------------------------------------
+   Mental Quiz app
+   - Pools generated (100 questions per language) from document
+   - Each item: {q, options:[...], answer:index, explain:"..."}
+   - 20 random unique questions per run
+   - Quadrilingual UI texts
+--------------------------------------------------------*/
+
+/* UI translations */
+const UI = {
+  fr: {
+    mainTitle: "Test Mental — Tennis",
+    subtitle: "Concentration & état d'esprit",
+    start: "Commencer", guide: "Guide", next: "Suivant", prev: "Précédent",
+    retake: "Recommencer (nouveau 20)", review: "Voir réponses corrigées",
+    lead: "20 questions basées sur le document fourni : 'L'Art de la Concentration dans le Tennis'.",
+    how: "20 questions aléatoires tirées d'un pool de 100. Après le test, consulte les explications.",
+    resYourScore: "Ton score", selectPrompt: "Choisis une réponse", exportCsv: "Exporter CSV"
+  },
+  en: {
+    mainTitle: "Mental Test — Tennis",
+    subtitle: "Concentration & Mindset",
+    start: "Start", guide: "Guide", next: "Next", prev: "Prev",
+    retake: "Retake (new 20)", review: "See corrected answers",
+    lead: "20 questions based on the provided document: 'The Art of Concentration in Tennis'.",
+    how: "20 randomized questions from a 100-question pool. Review explanations after the test.",
+    resYourScore: "Your score", selectPrompt: "Choose an answer", exportCsv: "Export CSV"
+  },
+  de: {
+    mainTitle: "Mentaltest — Tennis",
+    subtitle: "Konzentration & Geisteshaltung",
+    start: "Start", guide: "Anleitung", next: "Weiter", prev: "Zurück",
+    retake: "Erneut (neu 20)", review: "Korrigierte Antworten ansehen",
+    lead: "20 Fragen basierend auf dem Dokument: 'Die Kunst der Konzentration im Tennis'.",
+    how: "20 zufällige Fragen aus einem Pool von 100. Erklärungen nach dem Test anzeigen.",
+    resYourScore: "Dein Ergebnis", selectPrompt: "Wähle eine Antwort", exportCsv: "CSV exportieren"
+  },
+  nl: {
+    mainTitle: "Mentaal Test — Tennis",
+    subtitle: "Concentratie & Mindset",
+    start: "Start", guide: "Gids", next: "Volgende", prev: "Vorige",
+    retake: "Opnieuw (nieuwe 20)", review: "Bekijk gecorrigeerde antwoorden",
+    lead: "20 vragen gebaseerd op het document: 'De kunst van concentratie in tennis'.",
+    how: "20 willekeurige vragen uit een pool van 100. Bekijk uitleg na de test.",
+    resYourScore: "Jouw score", selectPrompt: "Kies een antwoord", exportCsv: "Exporteer CSV"
+  }
+};
+
+/* simple shuffle */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* --- Templates derived from the provided mental document
+   Themes: Inner Game (Self1/Self2), concentration, letting go, observation, practice, ego, competition vs collaboration, learning, stress, calm focus.
+   We generate many variations to reach 100 items per language.
+*/
+const TEMPLATES = {
+  fr: {
+    templates: [
+      ()=>({q:"Que représente le 'jeu intérieur' selon l'Inner Game ?", options:["Seul la technique","L'état d'esprit du joueur","La condition physique","La stratégie uniquement"], answer:1, explain:"Le jeu intérieur concerne l'état mental : concentration, confiance, perception."}),
+      ()=>({q:"Quel est un obstacle majeur à la maîtrise mentale ?", options:["L'entraînement excessif","Le doute de soi et l'auto-critique","Une bonne routine","Faire des exercices de respiration"], answer:1, explain:"Le doute de soi et l'auto-critique perturbent l'exécution des compétences."}),
+      ()=>({q:"Qu'est-ce que 'Letting Go' (laisser aller) implique ?", options:["Contrôler chaque mouvement consciemment","Faire confiance au corps et réduire l'interférence mentale","Augmenter la pression","Ignorer la technique"], answer:1, explain:"Laisser jouer le soi (Self) sans interférence consciente améliore la performance."}),
+      ()=>({q:"Quelle méthode d'apprentissage est recommandée ?", options:["Analyse mentale constante","Apprentissage détendu par observation et imitation","Se concentrer uniquement sur la technique","Forcer des répétitions rapides"], answer:1, explain:"L'apprentissage détendu et l'observation favorisent l'intégration naturelle des compétences."}),
+      ()=>({q:"Pourquoi la concentration calme est importante ?", options:["Parce qu'elle augmente la force","Parce qu'elle réduit les erreurs et améliore la performance","Parce qu'elle remplace la technique","Parce qu'elle crée de la peur"], answer:1, explain:"Une concentration calme permet une exécution plus précise et moins d'interférences."}),
+      ()=>({q:"Quel rôle joue l'ego dans la performance ?", options:["Aide toujours à gagner","Peut interférer via l'auto-critique et la recherche d'approbation","Rend un joueur invincible","N'a aucun effet"], answer:1, explain:"L'ego peut pousser à l'auto-critique et nuire à la fluidité du jeu."}),
+      ()=>({q:"Qu'est-ce que l'observation augmente ?", options:["La vitesse brute","La sensibilité aux sensations, impacts et mouvements","La puissance du service","Les fautes"], answer:1, explain:"Observer augmente la perception fine utile pour ajuster les coups."}),
+      ()=>({q:"Que signifie 'Self 1' dans l'Inner Game ?", options:["Le soi critique, conscient","Le soi intuitif, corporel","Le coach","Le public"], answer:0, explain:"Self 1 est la partie critique et consciente qui peut créer interférences."}),
+      ()=>({q:"Que signifie 'Self 2' ?", options:["Le soi critique","Le soi naturel et performant","La raquette","L'entraîneur"], answer:1, explain:"Self 2 réfère à la partie naturelle et performante qui sait faire sans sur-analyse."}),
+      ()=>({q:"Quelle est une stratégie pour réduire le stress en compétition ?", options:["Intensifier l'entraînement avant chaque match","Pratiquer une concentration détendue et routines calmes","Ignorer l'échauffement","Penser aux erreurs passées"], answer:1, explain:"Des routines calmes et la concentration détendue réduisent le stress et améliorent la performance."})
+    ]
+  },
+  en: {
+    templates: [
+      ()=>({q:"What does the 'inner game' emphasize?", options:["Technique only","The player's mental state","Physical strength","Only strategy"], answer:1, explain:"The Inner Game highlights mental aspects: concentration, confidence, and non-interference."}),
+      ()=>({q:"What mental obstacle often harms performance?", options:["Too much rest","Self-doubt and self-criticism","Perfect equipment","Working with partners"], answer:1, explain:"Self-doubt and self-criticism interrupt natural execution."}),
+      ()=>({q:"What is 'letting go' about?", options:["Controlling every movement consciously","Trusting the body and reducing conscious interference","Forcing more practice","Avoiding practice"], answer:1, explain:"Letting go means allowing the body's learned skills to operate without Self-1 interference."}),
+      ()=>({q:"Which learning approach is recommended?", options:["Constant analytical coaching","Relaxed learning through observation and imitation","Only repetitive drilling","Ignoring feedback"], answer:1, explain:"Relaxed observation and imitation foster natural skill acquisition."}),
+      ()=>({q:"Why is calm concentration powerful?", options:["It increases power","It reduces errors and improves execution","It replaces technique","It causes fear"], answer:1, explain:"Calm concentration enhances precision and reduces mental interference."}),
+      ()=>({q:"How can ego hurt performance?", options:["Always helps","By creating self-criticism and approval-seeking","Makes player invincible","No effect"], answer:1, explain:"Ego-driven self-criticism disrupts flow and performance."}),
+      ()=>({q:"What does increased observation improve?", options:["Raw speed","Sensitivity to impacts, movement and feel","Serve power","Error rate"], answer:1, explain:"Observation sharpens perception, enabling finer adjustments."}),
+      ()=>({q:"Who is 'Self 1'?", options:["The critical conscious self","The intuitive performing self","The racket","The coach"], answer:0, explain:"Self 1 is the conscious, often critical, self that can interfere."}),
+      ()=>({q:"Who is 'Self 2'?", options:["The critic","The natural performing self","The crowd","The strategy"], answer:1, explain:"Self 2 is the body's natural ability to perform without overthinking."}),
+      ()=>({q:"How to reduce competitive stress?", options:["Train harder just before match","Practice relaxed concentration and calm routines","Skip warm-up","Ruminate about mistakes"], answer:1, explain:"Calm routines and relaxed attention reduce stress and promote performance."})
+    ]
+  },
+  de: {
+    templates: [
+      ()=>({q:"Was betont das 'innere Spiel'?", options:["Nur Technik","Den mentalen Zustand des Spielers","Körperliche Kraft","Nur Taktik"], answer:1, explain:"Das Innere Spiel betont mentale Aspekte wie Konzentration und Nicht-Interferenz."}),
+      ()=>({q:"Welches mentale Hindernis schadet oft der Leistung?", options:["Zu viel Pause","Selbstzweifel und Selbstkritik","Perfektes Equipment","Partnertraining"], answer:1, explain:"Selbstkritik stört die natürliche Ausführung."}),
+      ()=>({q:"Was bedeutet 'loslassen' (letting go)?", options:["Jede Bewegung bewusst kontrollieren","Dem Körper vertrauen und bewusste Einmischung reduzieren","Mehr üben erzwingen","Training vermeiden"], answer:1, explain:"Loslassen heißt, dem Körper erlauben zu handeln ohne Self-1 Einmischung."}),
+      ()=>({q:"Welcher Lernansatz wird empfohlen?", options:["Permanente Analyse","Entspanntes Lernen durch Beobachtung und Imitation","Nur Drill","Feedback ignorieren"], answer:1, explain:"Entspanntes Beobachten fördert natürliches Lernen."}),
+      ()=>({q:"Warum ist ruhige Konzentration wichtig?", options:["Sie erhöht die Kraft","Sie reduziert Fehler und verbessert Ausführung","Sie ersetzt Technik","Sie erzeugt Angst"], answer:1, explain:"Ruhige Konzentration verbessert Präzision und verringert Interferenzen."}),
+      ()=>({q:"Wie kann das Ego die Leistung beeinträchtigen?", options:["Hilft immer","Durch Selbstkritik und Bedürfnis nach Anerkennung","Macht unschlagbar","Kein Effekt"], answer:1, explain:"Ego fördert Selbstkritik, die Fluss stört."}),
+      ()=>({q:"Was verbessert Beobachtung?", options:["Rohes Tempo","Sensibilität für Aufprall, Bewegung und Gefühl","Aufschlagkraft","Fehlerquote"], answer:1, explain:"Beobachtung erhöht feine Wahrnehmung für Anpassungen."}),
+      ()=>({q:"Wer ist 'Self 1'?", options:["Das kritische bewusste Selbst","Das intuitive ausführende Selbst","Der Coach","Der Schläger"], answer:0, explain:"Self 1 ist der kritische, bewusste Anteil, der stören kann."}),
+      ()=>({q:"Wer ist 'Self 2'?", options:["Der Kritiker","Das natürliche ausführende Selbst","Die Menge","Die Taktik"], answer:1, explain:"Self 2 macht das Gelernte ohne Überanalyse."}),
+      ()=>({q:"Wie reduziert man Stress im Wettkampf?", options:["Vor dem Match härter trainieren","Entspannte Konzentration und Routinen","Aufwärmen auslassen","Fehler durchdenken"], answer:1, explain:"Routinen und entspannte Aufmerksamkeit senken Stress."})
+    ]
+  },
+  nl: {
+    templates: [
+      ()=>({q:"Wat benadrukt het 'inner game'?", options:["Enkel techniek","De mentale staat van de speler","Lichamelijke kracht","Enkel tactiek"], answer:1, explain:"Het inner game legt de nadruk op mentale aspecten zoals concentratie en non-interferentie."}),
+      ()=>({q:"Welke mentale hindernis schaadt vaak prestaties?", options:["Te veel rust","Zelftwijfel en zelfkritiek","Perfect materiaal","Oefenen met partners"], answer:1, explain:"Zelfkritiek verstoort natuurlijke uitvoering."}),
+      ()=>({q:"Wat betekent 'letting go'?", options:["Elke beweging bewust controleren","Het lichaam vertrouwen en bewuste inmenging verminderen","Meer oefenen forceren","Training vermijden"], answer:1, explain:"Loslaten betekent het lichaam laten werken zonder Self-1 inmenging."}),
+      ()=>({q:"Welke leerbenadering wordt aanbevolen?", options:["Continue analyse","Ontspannen leren via observatie en imitatie","Alleen drill","Feedback negeren"], answer:1, explain:"Ontspannen observeren bevordert natuurlijk leren."}),
+      ()=>({q:"Waarom is rustige concentratie krachtig?", options:["Verhoogt kracht","Vermindert fouten en verbetert uitvoering","Vervangt techniek","Veroorzaakt angst"], answer:1, explain:"Rustige concentratie verhoogt precisie en vermindert interferentie."}),
+      ()=>({q:"Hoe schaadt ego prestaties?", options:["Helpt altijd","Door zelfkritiek en goedkeuring zoeken","Maakt speler onverslaanbaar","Geen effect"], answer:1, explain:"Ego creëert zelfkritiek die de flow verstoort."}),
+      ()=>({q:"Wat verbetert observatie?", options:["Ruwe snelheid","Gevoeligheid voor impact, beweging en gevoel","Servicekracht","Foutpercentage"], answer:1, explain:"Observatie scherpt waarneming, wat fijnere aanpassingen mogelijk maakt."}),
+      ()=>({q:"Wie is 'Self 1'?", options:["Het kritische bewuste zelf","Het intuïtieve uitvoerende zelf","De coach","Het racket"], answer:0, explain:"Self 1 is het bewuste, kritische deel dat kan storen."}),
+      ()=>({q:"Wie is 'Self 2'?", options:["De criticus","Het natuurlijke uitvoerende zelf","Het publiek","De tactiek"], answer:1, explain:"Self 2 is het lichaam dat uitvoert zonder over-analyse."}),
+      ()=>({q:"Hoe reduceer je competitieve stress?", options:["Vaker hard trainen voor de match","Oefen ontspannen concentratie en rustige routines","Warming-up overslaan","Fouten herkauwen"], answer:1, explain:"Rustige routines verlagen stress en verbeteren uitvoering."})
+    ]
+  }
+};
+
+/* build full 100-question pool per language (using templates with small variations) */
+function buildPool(lang){
+  const L = TEMPLATES[lang];
+  const pool = [];
+  let i=0, guard=0;
+  while(pool.length < 100 && guard++ < 2000){
+    const tfn = L.templates[i % L.templates.length];
+    // small permutations: append index or swap synonyms for variety
+    const base = tfn();
+    // Slight perturbation to create variations: add context phrase or shuffle options
+    // We'll shuffle options but keep correct answer index corrected.
+    let opts = base.options.slice();
+    // attempt to create small variant by shuffling options but track new answer index
+    const mapped = opts.map((o,idx)=>({o,idx}));
+    const s = shuffle(mapped);
+    const newOpts = s.map(x=>x.o);
+    const newAnswer = s.findIndex(x=>x.idx === base.answer);
+    const qText = base.q; // we keep question same for clarity (document fidelity)
+    const explain = base.explain || "";
+    // Avoid duplicate question+options identical
+    const key = qText + '|' + newOpts.join('|');
+    if(!pool.find(p=>p.key === key)){
+      pool.push({ key, q: qText, options: newOpts, answer: newAnswer, explain });
+    }
+    i++;
+  }
+  return shuffle(pool);
+}
+
+/* App state */
+let LANG = 'fr';
+let POOLS = {};
+let selectedQuestions = [];
+let currentIndex = 0;
+let selectedAnswers = [];
+let score = 0;
+const PAGE_SIZE = 20;
+
+/* DOM */
+const startBtn = document.getElementById('startBtn');
+const guideBtn = document.getElementById('guideBtn');
+const qNum = document.getElementById('qNum');
+const qText = document.getElementById('qText');
+const choicesEl = document.getElementById('choices');
+const quizCard = document.getElementById('quizCard');
+const introCard = document.getElementById('introCard');
+const progBar = document.getElementById('progBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resultCard = document.getElementById('resultCard');
+const scoreText = document.getElementById('scoreText');
+const feedback = document.getElementById('feedback');
+const retakeBtn = document.getElementById('retakeBtn');
+const reviewBtn = document.getElementById('reviewBtn');
+const exportBtn = document.getElementById('exportBtn');
+const mainTitle = document.getElementById('mainTitle');
+const subtitle = document.getElementById('subtitle');
+const titlePart = document.getElementById('titlePart');
+const titleSub = document.getElementById('titleSub');
+const leadEl = document.getElementById('lead');
+const panelTitle = document.getElementById('panelTitle');
+const panelText = document.getElementById('panelText');
+
+/* language buttons */
+document.querySelectorAll('.flag-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> {
+    const lang = btn.getAttribute('data-lang');
+    setLanguage(lang);
+  });
+});
+
+/* set language UI */
+function setLanguage(lang){
+  LANG = lang;
+  if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+  const u = UI[LANG];
+  mainTitle.textContent = u.mainTitle;
+  document.title = u.mainTitle;
+  subtitle.textContent = u.subtitle;
+  titlePart.textContent = u.mainTitle + " — ";
+  titleSub.textContent = u.subtitle;
+  leadEl.textContent = u.lead;
+  startBtn.textContent = u.start;
+  guideBtn.textContent = u.guide;
+  nextBtn.textContent = u.next;
+  prevBtn.textContent = u.prev;
+  retakeBtn.textContent = u.retake;
+  reviewBtn.textContent = u.review;
+  exportBtn.textContent = u.exportCsv || u.exportCsv || 'Export CSV';
+  panelTitle.textContent = u.panelTitle;
+  panelText.textContent = u.how;
+  document.querySelectorAll('.flag-btn').forEach(b=>b.style.opacity = b.getAttribute('data-lang')===LANG? '1' : '0.6');
+  // show intro
+  introCard.style.display='block';
+  quizCard.style.display='none';
+  resultCard.style.display='none';
+  feedback.textContent='';
+}
+
+/* init */
+setLanguage(LANG);
+
+/* start quiz */
+function startQuiz(){
+  if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+  selectedQuestions = shuffle(POOLS[LANG]).slice(0,PAGE_SIZE);
+  currentIndex = 0;
+  selectedAnswers = Array(PAGE_SIZE).fill(null);
+  score = 0;
+  introCard.style.display='none';
+  quizCard.style.display='block';
+  resultCard.style.display='none';
+  renderQuestion();
+  updateButtons();
+  updateProgress();
+}
+
+
+// keep language when going home
+document.getElementById('homeBtn')?.addEventListener('click', () => {
+  localStorage.setItem('lang', LANG);
+});
+
+/* render question */
+function renderQuestion(){
+  const item = selectedQuestions[currentIndex];
+  qNum.textContent = `${currentIndex+1} / ${PAGE_SIZE}`;
+  qText.textContent = item.q;
+  choicesEl.innerHTML = '';
+  item.options.forEach((opt, idx)=>{
+    const d = document.createElement('div');
+    d.className = 'choice';
+    if(selectedAnswers[currentIndex] === idx) d.classList.add('selected');
+    d.innerHTML = `<div class="label">${String.fromCharCode(65+idx)}. ${opt}</div><div class="meta"></div>`;
+    d.onclick = ()=> selectOption(idx);
+    choicesEl.appendChild(d);
+  });
+}
+
+/* select */
+function selectOption(idx){
+  selectedAnswers[currentIndex] = idx;
+  Array.from(choicesEl.children).forEach((c,i)=> c.classList.toggle('selected', i===idx));
+  updateButtons();
+}
+
+/* nav */
+prevBtn.addEventListener('click', ()=> {
+  if(currentIndex>0){ currentIndex--; renderQuestion(); updateButtons(); updateProgress(); }
+});
+nextBtn.addEventListener('click', ()=> {
+  if(selectedAnswers[currentIndex] === null){ alert(UI[LANG].selectPrompt || 'Choose an answer'); return; }
+  if(currentIndex < PAGE_SIZE-1){ currentIndex++; renderQuestion(); updateButtons(); updateProgress(); }
+  else finishQuiz();
+});
+function updateButtons(){
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.textContent = currentIndex === PAGE_SIZE-1 ? (UI[LANG].review || 'Finish') : UI[LANG].next;
+}
+function updateProgress(){
+  const pct = Math.round((currentIndex / PAGE_SIZE) * 100);
+  progBar.style.width = pct + '%';
+}
+
+/* finish */
+function finishQuiz(){
+  score = 0;
+  selectedQuestions.forEach((q,i)=> { if(selectedAnswers[i] === q.answer) score++; });
+  scoreText.textContent = `${score} / ${PAGE_SIZE}`;
+  // simple level labels
+  let levelTxt = '';
+  if(score <= 4) levelTxt = LANG==='fr' ? 'Débutant' : LANG==='de'? 'Anfänger' : LANG==='nl' ? 'Beginner' : 'Rookie';
+  else if(score <= 9) levelTxt = LANG==='fr' ? 'Stratège en formation' : LANG==='de' ? 'Taktiker in Ausbildung' : LANG==='nl' ? 'Strategie in opleiding' : 'Strategist in Training';
+  else if(score <= 15) levelTxt = LANG==='fr' ? 'Penseur tactique' : LANG==='de' ? 'Taktischer Denker' : LANG==='nl' ? 'Tactische denker' : 'Tactical Thinker';
+  else levelTxt = LANG==='fr' ? 'Maître du mental' : LANG==='de' ? 'Meister des Geistes' : LANG==='nl' ? 'Meester van de geest' : 'Master of Mind';
+  document.getElementById('levelInfo').innerHTML = `<div style="font-weight:800;color:var(--accent)">${levelTxt}</div><div class="small">${Math.round(score/PAGE_SIZE*100)}%</div>`;
+  const fb = {
+    fr: ["Travaille la base : respiration et observation.","Connais les principes ; répète en situation de jeu.","Bonne lecture mentale ; peaufine la pratique détendue.","Excellent : poursuis l'intégration quotidienne."],
+    en: ["Work the basics: breathing and observation.","Know the principles; rehearse in match contexts.","Good mental reading; refine relaxed practice.","Excellent: continue integrating daily."],
+    de: ["Arbeite an Grundlagen: Atmung und Beobachtung.","Kenne die Prinzipien; übe in Spielsituationen.","Gute mentale Lesefähigkeit; entspannte Praxis verfeinern.","Ausgezeichnet: weiter integrieren."],
+    nl: ["Oefen de basis: ademhaling en observatie.","Ken de principes; oefen in wedstrijdcontext.","Goed mentaal inzicht; verfijn ontspannen oefenen.","Uitstekend: blijf dagelijks integreren."]
+  };
+  feedback.textContent = fb[LANG][ Math.min(3, Math.floor(score / (PAGE_SIZE/4))) ];
+  quizCard.style.display='none';
+  resultCard.style.display='block';
+  progBar.style.width = '100%';
+}
+
+/* review: open new window with explanations and color coding */
+function reviewAll(){
+  const win = window.open('', '_blank', 'width=900,height=800,scrollbars=yes');
+  const doc = win.document;
+  doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Review</title>');
+  doc.write('<style>body{font-family:Arial;padding:18px;background:#f7f9fc;color:#0b1224} .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7} .review-opt{padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center} .sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid #b08cff} .corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid #8dd39a} .wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid #f19b9b} .explain{margin-top:8px;padding-left:6px;font-size:14px;color:#0b1224} h2{margin-top:0}</style>');
+  doc.write('</head><body>');
+  doc.write('<h2>' + (UI[LANG].mainTitle) + ' — Review</h2>');
+  doc.write('<p><strong>' + (UI[LANG].resYourScore || 'Score') + ':</strong> ' + score + ' / ' + PAGE_SIZE + '</p>');
+  selectedQuestions.forEach((q,i)=>{
+    doc.write('<div class="review-q"><strong>' + (i+1) + '. ' + q.q + '</strong>');
+    q.options.forEach((opt,j)=>{
+      let cls='review-opt';
+      let mark='';
+      if(j===q.answer){ cls += ' corr'; mark='✅'; }
+      if(selectedAnswers[i]===j && j!==q.answer){ cls += ' wr'; mark='❌'; }
+      if(selectedAnswers[i]===j){ cls += ' sel'; }
+      doc.write('<div class="' + cls + '"><div>' + String.fromCharCode(65+j) + '. ' + opt + '</div><div style="font-weight:700">' + mark + '</div></div>');
+    });
+    if(q.explain){ doc.write('<div class="explain"><strong>Explication :</strong> ' + q.explain + '</div>'); }
+    doc.write('</div>');
+  });
+  doc.write('</body></html>');
+  doc.close();
+}
+
+/* export CSV */
+function exportCSV(){
+  const rows = [];
+  const header = ['timestamp','language','score','qIndex','question','selectedIndex','selectedText','correctIndex','correctText','explain'];
+  rows.push(header);
+  const ts = new Date().toISOString();
+  selectedQuestions.forEach((q,i)=>{
+    const selIdx = selectedAnswers[i] !== null ? selectedAnswers[i] : '';
+    const selText = selIdx !== '' ? q.options[selIdx] : '';
+    const corrIdx = q.answer;
+    const corrText = q.options[corrIdx];
+    rows.push([ts, LANG, score + '/' + PAGE_SIZE, i+1, q.q.replace(/[\n\r]+/g,' '), selIdx, selText.replace(/,/g,';'), corrIdx, corrText.replace(/,/g,';'), (q.explain || '').replace(/[\n\r]+/g,' ')]);
+  });
+  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mental_tennis_${LANG}_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(url);
+  a.remove();
+}
+
+/* hooks */
+startBtn.addEventListener('click', startQuiz);
+retakeBtn.addEventListener('click', startQuiz);
+reviewBtn.addEventListener('click', reviewAll);
+exportBtn.addEventListener('click', exportCSV);
+guideBtn.addEventListener('click', ()=> alert(UI[LANG].how));
+
+/* keyboard support */
+document.addEventListener('keydown', (e)=>{
+  if(quizCard.style.display==='block'){
+    if(['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key,10)-1;
+      const opts = document.querySelectorAll('.choice');
+      if(opts[idx]) selectOption(idx);
+    } else if(e.key === 'Enter'){ nextBtn.click(); }
+  }
+});
+
+/* click-to-select */
+choicesEl.addEventListener('click', (e)=>{
+  let el = e.target;
+  while(el && !el.classList.contains('choice')) el = el.parentElement;
+  if(!el) return;
+  const nodes = Array.from(choicesEl.children);
+  const idx = nodes.indexOf(el);
+  if(idx>=0) selectOption(idx);
+});
+
+/* ensure first pool */
+if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+</script>
+</body>
+</html>

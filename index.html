@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tennis IQ — Home</title>
+
+<style>
+:root{
+  --bg:#f3f6fb;
+  --card:#ffffff;
+  --accent:#7a4fff;
+  --text:#0b1224;
+  --muted:#6b7280;
+}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background:linear-gradient(180deg,#eaf4ff,#f3f6fb);
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+.container{
+  max-width:820px;
+  width:100%;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 40px rgba(2,6,23,.08);
+  padding:28px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+h1{margin:0;font-size:22px;}
+.lang button{
+  background:none;border:0;cursor:pointer;
+  font-size:22px;padding:6px;opacity:.6
+}
+.lang button.active{opacity:1}
+main{margin-top:30px;display:grid;gap:16px}
+.card{
+  border:1px solid rgba(11,17,36,.06);
+  border-radius:14px;
+  padding:22px;
+}
+.card h2{margin:0 0 6px}
+.card p{margin:0 0 14px;color:var(--muted)}
+.btn{
+  display:inline-block;background:var(--accent);color:#fff;
+  text-decoration:none;padding:12px 18px;
+  border-radius:12px;font-weight:700;transition:.15s ease
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(122,79,255,.35)
+}
+footer{text-align:center;margin-top:24px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1 id="title">Tennis IQ Platform</h1>
+  <div class="lang">
+    <button data-lang="en" class="active">🇬🇧</button>
+    <button data-lang="fr">🇫🇷</button>
+    <button data-lang="de">🇩🇪</button>
+    <button data-lang="nl">🇳🇱</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- Strategy & Tactics -->
+  <div class="card">
+    <h2 id="t1">Strategy & Tactics Quiz</h2>
+    <p id="d1">Test your tactical understanding, patterns, and match intelligence.</p>
+    <a href="strategies_tactics/index.html" class="btn" id="b1">Start Quiz</a>
+  </div>
+
+  <!-- Champion’s Mindset -->
+
+
+
+  <div class="card">
+    <h2 id="t4">Technical – Strategy — Champion Mindset</h2>
+    <p id="d4">Elevate your game</p>
+    <a href="theChamionMindset_elevate_game/index.html" class="btn" id="b4">
+      Start Elevate your game — Champion Mindset Quiz
+    </a>
+  </div>
+
+
+
+
+
+  <div class="card">
+    <h2 id="t2">Champion’s Mindset — Mental Toughness</h2>
+    <p id="d2">Evaluate focus, resilience, confidence, and competitive mindset.</p>
+    <a href="TheChampionMindsetMentalToughness/index.html" class="btn" id="b2">
+      Start Mental Quiz — Champion’s Mindset
+    </a>
+  </div>
+
+  <!-- Inner Game of Tennis -->
+  <div class="card">
+    <h2 id="t3">The Inner Game of Tennis</h2>
+    <p id="d3">Explore concentration, awareness, ego control, and mental clarity.</p>
+    <a href="mental/the-inner-game-of-tennis/index.html" class="btn" id="b3">
+      Start Mental Quiz — Inner Game
+    </a>
+  </div>
+
+</main>
+
+<footer>© Coach Panos Lev — Tennis IQ</footer>
+
+</div>
+
+<script>
+const T = {
+  en:{
+    title:"Tennis IQ Platform",
+    t1:"Strategy & Tactics Quiz",
+    d1:"Test your tactical understanding, patterns, and match intelligence.",
+    b1:"Start Quiz",
+
+    t2:"Champion’s Mindset — Mental Toughness",
+    d2:"Evaluate focus, resilience, confidence, and competitive mindset.",
+    b2:"Start Mental Quiz — Champion’s Mindset",
+
+    t3:"The Inner Game of Tennis",
+    d3:"Explore concentration, awareness, ego control, and mental clarity.",
+    b3:"Start Mental Quiz — Inner Game",
+
+    t4:"Technical – Strategy — Champion Mindset",
+    d4:"Elevate your Gameame",
+    b4:"Start Quiz Elevate your game — Champion Mindset"
+
+ 
+ },
+
+  fr:{
+    title:"Plateforme Tennis IQ",
+    t1:"Quiz Stratégie & Tactique",
+    d1:"Teste ta compréhension tactique et ton intelligence de match.",
+    b1:"Commencer",
+
+    t2:"Mentalité de Champion — Solidité Mentale",
+    d2:"Évalue la concentration, la résilience, la confiance et l’état d’esprit compétitif.",
+    b2:"Commencer le quiz mental — Mentalité de Champion",
+
+    t3:"Le Jeu Intérieur du Tennis",
+    d3:"Développe la concentration, la conscience et la maîtrise de l’ego.",
+    b3:"Commencer le quiz mental — Jeu Intérieur",
+
+    t4: "Technique & Stratégie — Mental de Champion",
+    d4: "Élevez votre niveau de jeu",
+    b4: "Commencer le quiz — Élevez votre jeu · Mental de Champion"
+
+  },
+
+  de:{
+    title:"Tennis IQ Plattform",
+    t1:"Strategie- & Taktik-Quiz",
+    d1:"Teste dein taktisches Verständnis und deine Spielintelligenz.",
+    b1:"Quiz starten",
+
+    t2:"Mentale Einstellung eines Champions — Mentale Stärke",
+    d2:"Bewerte Fokus, Widerstandsfähigkeit, Selbstvertrauen und Wettkampfmentalität.",
+    b2:"Mentales Quiz starten — Champion-Mindset",
+
+    t3:"Das Innere Spiel des Tennis",
+    d3:"Verbessere Konzentration, Wahrnehmung und mentale Klarheit.",
+    b3:"Mentales Quiz starten — Inneres Spiel",
+    
+    t4: "Technik & Strategie — Siegermentalität",
+    d4: "Bringe dein Spiel auf das nächste Level",
+    b4: "Quiz starten — Hebe dein Spiel auf das nächste Level · Siegermentalität"
+
+  },
+
+  nl:{
+    title:"Tennis IQ Platform",
+    t1:"Strategie- & Tactiekquiz",
+    d1:"Test je tactisch inzicht en wedstrijdintelligentie.",
+    b1:"Start quiz",
+
+    t2:"Kampioensmentaliteit — Mentale Weerbaarheid",
+    d2:"Evalueer focus, veerkracht, zelfvertrouwen en wedstrijdmentaliteit.",
+    b2:"Start mentale quiz — Kampioensmentaliteit",
+
+    t3:"The Inner Game of Tennis",
+    d3:"Werk aan concentratie, bewustzijn en mentale rust.",
+    b3:"Start mentale quiz — Inner Game",
+
+    t4: "Techniek & Strategie — Kampioensmentaliteit",
+    d4: "Til je spel naar een hoger niveau",
+    b4: "Start quiz — Til je spel naar een hoger niveau · Kampioensmentaliteit"
+
+  }
+};
+
+function setLang(l){
+  localStorage.setItem("lang",l);
+  document.querySelectorAll(".lang button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.lang===l);
+  });
+  const x=T[l];
+  for(const k in x){
+    document.getElementById(k).textContent=x[k];
+  }
+}
+
+document.querySelectorAll(".lang button").forEach(b=>{
+  b.onclick=()=>setLang(b.dataset.lang);
+});
+
+setLang(localStorage.getItem("lang")||"en");
+
+
+
+
+
+</script>
+
+</body>
+</html>

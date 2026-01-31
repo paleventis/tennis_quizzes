@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tennis IQ — Quadrilingual Quiz</title>
+<style>
+  :root{
+    --bg:#f3f6fb; --card:#ffffff; --muted:#6b7280; --accent:#7a4fff;
+    --green:#16a34a; --red:#ef4444; --purple:#6a37d8;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;}
+  body{
+    margin:0; background:linear-gradient(180deg,#eaf4ff,#f3f6fb);
+    color:#0b1224; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .container{width:100%;max-width:980px;background:var(--card);border-radius:14px;box-shadow:0 10px 40px rgba(2,6,23,0.08);overflow:hidden;}
+  header{display:flex;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid rgba(11,17,36,0.04)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,#fff,#f3f6fb);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);font-size:20px}
+  h1{margin:0;font-size:18px}
+  .lang{margin-left:auto;display:flex;gap:8px}
+  .flag-btn{background:none;border:0;cursor:pointer;font-size:20px;padding:6px;border-radius:8px}
+  main{display:flex;gap:20px;padding:20px}
+  .left{flex:1;min-width:320px}
+  .card{background:#fff;border-radius:12px;padding:16px;border:1px solid rgba(11,17,36,0.04)}
+  .intro p{color:var(--muted);margin:8px 0 0}
+  .question-number{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .question-text{font-size:18px;margin:6px 0 14px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{border:1px solid rgba(11,17,36,0.06);padding:12px;border-radius:10px;cursor:pointer;background:#fbfdff;transition:all .12s;display:flex;align-items:center;justify-content:space-between}
+  .choice:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+  .choice.selected{background:linear-gradient(180deg,#f1e9ff,#efe6ff);border-color:rgba(106,55,216,0.18)}
+  .choice.correct{background:linear-gradient(180deg,#e9f8ec,#d6f1d9);border-color:rgba(22,163,74,0.14)}
+  .choice.wrong{background:linear-gradient(180deg,#ffecec,#ffd6d6);border-color:rgba(239,68,68,0.12)}
+  .choice .label{font-weight:600}
+  .choice .meta{font-size:14px;color:var(--muted)}
+  .footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(122,79,255,0.12)}
+  .progress{height:10px;background:#f0f4fb;border-radius:999px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#5e32c8);width:0%}
+  .results .score{font-size:28px;font-weight:800;color:var(--accent)}
+  .small{font-size:13px;color:var(--muted)}
+  footer{padding:12px 22px;color:var(--muted);font-size:13px;text-align:center}
+  /* review styles */
+  .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7}
+  .review-opt{padding:8px;border-radius:8px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
+  .review-opt.sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid rgba(106,55,216,0.14)}
+  .review-opt.corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid rgba(22,163,74,0.14)}
+  .review-opt.wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid rgba(239,68,68,0.12)}
+  .explain{font-size:14px;color:#0b1224;margin-top:8px;padding-left:6px}
+  @media (max-width:900px){
+    main{flex-direction:column}
+    .lang{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div class="container" role="application" aria-label="Tennis IQ Quadrilingual Quiz">
+  <header>
+    <div class="brand">
+      <div class="logo">TL</div>
+      <div>
+        <h1 id="mainTitle">Tennis IQ Test</h1>
+        <div id="subtitle" class="small">By Coach Panos Lev — Quadrilingual</div>
+      </div>
+    </div>
+
+    <div class="lang" aria-label="language selector">
+      <button class="flag-btn" title="Français" data-lang="fr">🇫🇷</button>
+      <button class="flag-btn" title="English" data-lang="en">🇬🇧</button>
+      <button class="flag-btn" title="Deutsch" data-lang="de">🇩🇪</button>
+      <button class="flag-btn" title="Nederlands" data-lang="nl">🇳🇱</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="left">
+      <div id="introCard" class="card intro">
+        <div id="titleLine"><strong id="titlePart">Tennis IQ Test — </strong><span id="titleSub">Find your tactical mindset</span></div>
+        <p id="lead" class="small">20 quick multiple-choice questions based on tactics, player types and fundamentals. Be honest!</p>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button id="startBtn" class="btn">Start Quiz</button>
+          <button id="guideBtn" class="btn secondary">Quick Guide</button>
+        </div>
+      </div>
+
+      <div id="quizCard" class="card" style="display:none;margin-top:12px">
+        <div class="question-number" id="qNum">Question 1 of 20</div>
+        <div class="question-text" id="qText">...</div>
+        <div class="choices" id="choices"></div>
+
+        <div class="footer">
+          <div style="flex:1">
+            <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="prevBtn" class="btn secondary" disabled>Prev</button>
+            <button id="nextBtn" class="btn">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultCard" class="card" style="display:none;margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small" id="resLabel">Your Score</div>
+            <div class="score" id="scoreText">0 / 20</div>
+          </div>
+          <div id="levelInfo" style="text-align:right"></div>
+        </div>
+        <div id="feedback" style="margin-top:12px;color:#0b1224"></div>
+
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button id="retakeBtn" class="btn">Retake (new 20)</button>
+          <button id="reviewBtn" class="btn secondary">See corrected answers</button>
+          <button id="exportBtn" class="btn secondary" title="Download CSV">Export CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right" style="width:340px;min-width:240px">
+      <div class="card">
+        <h3 id="panelTitle">How it works</h3>
+        <p id="panelText" class="small">Answer 20 randomized questions drawn from a larger pool. After finishing you can review correct/incorrect answers.</p>
+        <hr />
+        <div style="margin-top:8px">
+          <div class="small"><strong>Legend</strong></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:8px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--purple)"></div><div class="small">Your selected answer</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--green)"></div><div class="small">Correct answer</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--red)"></div><div class="small">Your wrong answer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="small"><strong>Language</strong></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="flag-btn" data-lang="fr">🇫🇷 Français</button>
+          <button class="flag-btn" data-lang="en">🇬🇧 English</button>
+          <button class="flag-btn" data-lang="de">🇩🇪 Deutsch</button>
+          <button class="flag-btn" data-lang="nl">🇳🇱 Nederlands</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© Coach Panos Lev — Tennis IQ</footer>
+</div>
+
+<script>
+/* -------------------------
+  Quadrilingual question generator + app logic (updated)
+  - Separate pools per language (generated from templates)
+  - Each restart selects 20 random unique questions
+  - Review shows green ✅ for correct, red ❌ for wrong, purple highlight for user's pick
+  - Per-question 'explain' is shown in review
+  - Export CSV function added
+  - Titles (mainTitle and document.title) change with language
+--------------------------*/
+
+/* --- UI translations (including mainTitle text) --- */
+const UI = {
+  en: {
+    mainTitle: "Tennis IQ Test",
+    subtitle: "Find your tactical mindset",
+    start: "Start Quiz", guide: "Quick Guide", next: "Next", prev: "Prev", retake: "Retake (new 20)",
+    review: "See corrected answers", lead: "20 quick multiple-choice questions based on tactics, player types and fundamentals. Be honest!",
+    how: "Answer 20 randomized questions drawn from a larger pool. After finishing you can review correct/incorrect answers.",
+    panelTitle: "How it works", resYourScore: "Your Score", selectPrompt: "Choose an answer",
+    exportCsv: "Export CSV"
+  },
+  fr: {
+    mainTitle: "Test de QI Tennis",
+    subtitle: "Découvre ton profil tactique",
+    start: "Commencer le test", guide: "Guide rapide", next: "Suivant", prev: "Précédent", retake: "Recommencer (nouveau 20)",
+    review: "Voir mes réponses corrigées", lead: "20 questions à choix multiples sur tactiques, types de joueurs et fondamentaux. Réponds honnêtement !",
+    how: "20 questions aléatoires issues d'un large pool. Après le test, consulte les réponses correctes/incorrectes.",
+    panelTitle: "Fonctionnement", resYourScore: "Ton Score", selectPrompt: "Choisis une réponse",
+    exportCsv: "Exporter CSV"
+  },
+  de: {
+    mainTitle: "Tennis IQ Test",
+    subtitle: "Finde deine taktische Ausrichtung",
+    start: "Test starten", guide: "Kurzanleitung", next: "Weiter", prev: "Zurück", retake: "Erneut (neu 20)",
+    review: "Korrigierte Antworten anzeigen", lead: "20 Multiple-Choice Fragen zu Taktik, Spielertypen und Grundlagen. Sei ehrlich!",
+    how: "20 zufällige Fragen aus einem großen Pool. Nach dem Test kannst du korrekte/falsche Antworten ansehen.",
+    panelTitle: "So funktioniert's", resYourScore: "Dein Ergebnis", selectPrompt: "Wähle eine Antwort",
+    exportCsv: "CSV exportieren"
+  },
+  nl: {
+    mainTitle: "Tennis IQ Test",
+    subtitle: "Ontdek je tactische profiel",
+    start: "Start test", guide: "Snelgids", next: "Volgende", prev: "Vorige", retake: "Opnieuw (nieuwe 20)",
+    review: "Bekijk gecorrigeerde antwoorden", lead: "20 meerkeuzevragen over tactiek, spelerstypen en basisprincipes. Wees eerlijk!",
+    how: "20 willekeurige vragen uit een grote pool. Na afloop kun je juiste/foute antwoorden bekijken.",
+    panelTitle: "Hoe het werkt", resYourScore: "Jouw score", selectPrompt: "Kies een antwoord",
+    exportCsv: "Exporteer CSV"
+  }
+};
+
+/* --- Helper shuffle --- */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* --- Templates with explanation field --- */
+const TEMPLATES = {
+  en: {
+    players: ["All-Courter","Wimpy Server","Big Server","Drop Shot–Lobber","Runner–Pusher","Counter-Puncher","Serve-and-Volleyer","Huge Forehand","Moonballer","Aggressive Baseliner","Steady Baseliner","Slicer-Hacker","Left-Handed Player"],
+    tactics: ["Golden Tactic","Bread and Butter","Coast to Coast","Controlling Time","Superpowers"],
+    fundamentals: ["consistency","depth","mixing pace","attacking short balls","movement"],
+    templates: [
+      q=>({q:`What is the main goal of the ${q.tactics[0]}?`, options:["Hit lots of winners","Make fewer errors than your opponent","Always approach the net","Only use power"], answer:1, explain:"The Golden Tactic is about consistency — out-rally and make fewer mistakes."}),
+      q=>({q:`When facing a ${q.players[2]}, what's a smart return plan?`, options:["Stand very far back","Use cross-court topspin and chips","Try winners on every return","Always lob"], answer:1, explain:"Big servers are neutralized by controlled, varied returns and chips to reduce pace."}),
+      q=>({q:`What does 'Controlling Time' usually recommend?`, options:["Give opponent more time","Approach the net to reduce their time","Always moonball","Always slice"], answer:1, explain:"Attacking the net cuts down opponent's reaction time and target area."}),
+      q=>({q:`To apply 'Coast to Coast' you should:`, options:["Hit same shot repeatedly","Move opponent side-to-side and exploit open court","Only lob","Only down-the-line"], answer:1, explain:"Lateral movement creates space and wears opponents down."}),
+      q=>({q:`Which is core to the 'Golden Tactic'?`, options:["Aggression every point","Consistency and fewer errors","Risking all shots","Only attacking second serves"], answer:1, explain:"Winning by consistency beats high-risk play."}),
+      q=>({q:`Best approach vs a Moonballer?`, options:["Back up and rally","Take the ball early and approach the net","Moonball back","Force winners from deep"], answer:1, explain:"Taking the ball early prevents being pushed to the fence and allows attacking."}),
+      q=>({q:`What to observe in warm-up?`, options:["Balls to the middle to see choices","Only practice your serve","Ignore volleys","Just crosscourt work"], answer:0, explain:"Hitting down the middle reveals opponent's preferred stroke and movement."}),
+    ]
+  },
+
+  fr: {
+    players: ["All-Courter","Serveur faible","Gros serveur","Drop Shot–Lobber","Runner–Pusher","Counter-Puncher","Serve-and-Volleyer","Grand coup droit","Moonballer","Baselineur agressif","Baselineur régulier","Sliceur-Hacker","Gaucher"],
+    tactics: ["Tactique d'Or","Bread and Butter","Côté à Côté","Contrôler le temps","Superpouvoirs"],
+    fundamentals: ["consistance","profondeur","variation de rythme","attaquer les balles courtes","déplacement"],
+    templates: [
+      q=>({q:`Quel est l'objectif principal de la ${q.tactics[0]} ?`, options:["Chercher des winners","Faire moins d'erreurs que l'adversaire","Jouer uniquement au filet","Frapper plus fort"], answer:1, explain:"La tactique d'or vise la constance — faire moins d'erreurs que l'adversaire."}),
+      q=>({q:`Face à un ${q.players[2]}, quelle stratégie de retour ?`, options:["Rester très loin","Retour croisé lifté et chip","Tenter un winner à chaque fois","Lober systématiquement"], answer:1, explain:"Les gros servers sont neutralisés par des retours variés et contrôlés, pas par la puissance brute."}),
+      q=>({q:`Que recommande 'Contrôler le temps' ?`, options:["Donner plus de temps à l'adversaire","Approcher le filet pour réduire son temps","Toujours moonball","Toujours slicer"], answer:1, explain:"Aller au filet réduit le temps de préparation de l'adversaire et la zone de frappe."}),
+      q=>({q:`Idée du 'Côté à Côté' :`, options:["Répéter le même coup","Faire bouger latéralement et exploiter l'espace","Toujours lobbing","Toujours jouer long de ligne"], answer:1, explain:"Faire courir l'adversaire latéralement ouvre le court et l'épuise."}),
+      q=>({q:`Principe clé de la 'Tactique d'Or' :`, options:["Être agressif systématiquement","Constante et moins d'erreurs","Tout risquer","Servir-volley tout le temps"], answer:1, explain:"La constance l'emporte souvent sur l'attaque risquée."}),
+      q=>({q:`Comment contrer un Moonballer ?`, options:["Reculer et remettre","Prendre la balle tôt et monter","Retourner des moonballs","Forcer des winners"], answer:1, explain:"Prendre tôt empêche l'adversaire de te pousser vers la clôture."}),
+      q=>({q:`Que regarder à l'échauffement ?`, options:["Frapper au centre et observer","Seulement le service","Ignorer les volées","Juste cross"], answer:0, explain:"Les choix faits sur des balles au centre révèlent les préférences de l'adversaire."}),
+    ]
+  },
+
+  de: {
+    players: ["All-Courter","Schwacher Server","Big Server","Drop Shot–Lobber","Runner–Pusher","Counter-Puncher","Serve-and-Volleyer","Großer Vorhand","Moonballer","Aggressive Baseliner","Steady Baseliner","Slicer-Hacker","Linkshänder"],
+    tactics: ["Goldtaktik","Bread and Butter","Coast to Coast","Zeitkontrolle","Superkräfte"],
+    fundamentals: ["Konsistenz","Tiefe","Geschwindigkeitsvariation","kurze Bälle angreifen","Beinarbeit"],
+    templates: [
+      q=>({q:`Was ist das Ziel der ${q.tactics[0]}?`, options:["Viele Winner","Weniger Fehler als Gegner","Immer Netzspiel","Nur Power"], answer:1, explain:"Die Goldtaktik fokussiert auf Konsistenz und Fehlerreduzierung."}),
+      q=>({q:`Gegen einen ${q.players[2]} ist empfehlenswert:`, options:["Sehr weit zurückstehen","Cross-Topspin und Chip","Jeden Return zum Winner machen","Immer loben"], answer:1, explain:"Kontrollierte, variierende Returns neutralisieren starke Aufschläge."}),
+      q=>({q:`Was bedeutet 'Zeit kontrollieren'?`, options:["Gegner mehr Zeit geben","Zum Netz kommen und seine Zeit reduzieren","Immer Moonballs","Nie vorrücken"], answer:1, explain:"Vorstoß ans Netz nimmt dem Gegner Zeit und reduziert seine Optionen."}),
+      q=>({q:`'Coast to Coast' heißt:`, options:["Immer gleiche Seite","Seitlich bewegen und Raum nutzen","Nur Down-the-line","Viele Moonballs"], answer:1, explain:"Seitliche Bewegung öffnet Räume und ermüdet den Gegner."}),
+      q=>({q:`Kern der ${q.tactics[0]}:`, options:["Ständig aggressiv","Konsistenz & weniger Fehler","Alles riskieren","Nur 2. Aufschläge attackieren"], answer:1, explain:"Konstanz siegt über unnötiges Risiko."}),
+      q=>({q:`Wie gegen Moonballer?`, options:["Zurückgehen und rallyen","Ball früh nehmen und ans Netz","Moonballs zurückspielen","Winners forcieren"], answer:1, explain:"Frühes Spielen verhindert Rückdrängen zum Zaun."}),
+      q=>({q:`Worauf achten beim Warm-up?`, options:["Bälle in die Mitte und beobachten","Nur Aufschlag","Volleys ignorieren","Nur cross"], answer:0, explain:"Mitte-Bälle zeigen welche Seite bevorzugt wird."}),
+    ]
+  },
+
+  nl: {
+    players: ["All-Courter","Zwakke Server","Big Server","Drop Shot–Lobber","Runner–Pusher","Counter-Puncher","Serve-and-Volleyer","Grote Forehand","Moonballer","Aggressive Baseliner","Steady Baseliner","Slicer-Hacker","Linkshandige"],
+    tactics: ["Gouden Tactiek","Bread and Butter","Coast to Coast","Tijd Beheersen","Superkrachten"],
+    fundamentals: ["consistentie","diepte","tempo variatie","kort aanvallen","voetwerk"],
+    templates: [
+      q=>({q:`Wat is doel van de ${q.tactics[0]}?`, options:["Veel winners","Minder fouten maken dan tegenstander","Altijd naar het net","Alleen kracht"], answer:1, explain:"De gouden tactiek draait om consistentie en het beperken van fouten."}),
+      q=>({q:`Tegen een ${q.players[2]} is slim:`, options:["Erg ver achter staan","Cross-topspin en chippen","Elke return winnen proberen","Altijd lobben"], answer:1, explain:"Gecontroleerde, gevarieerde returns neutraliseren sterke servers."}),
+      q=>({q:`Wat betekent 'Tijd Beheersen'?`, options:["Tegenstander meer tijd geven","Naar het net komen om zijn tijd te beperken","Altijd moonballs","Nooit naar voren"], answer:1, explain:"Naar het net gaan vermindert de reactietijd van de tegenstander."}),
+      q=>({q:`'Coast to Coast' is:`, options:["Altijd dezelfde kant","Zijwaarts bewegen en ruimte benutten","Altijd down-the-line","Veel moonballs"], answer:1, explain:"Zijwaarts bewegen opent ruimte en vermoeit de tegenstander."}),
+      q=>({q:`Kern van ${q.tactics[0]}:`, options:["Altijd agressief","Consistentie en minder fouten","Alles riskeren","Alleen 2e service aanvallen"], answer:1, explain:"Consistentie verslaat risico op lange termijn."}),
+      q=>({q:`Hoe tegen Moonballer?`, options:["Teruglopen en rallyen","Bal vroeg nemen en naar net gaan","Moonballs terugspelen","Winners forceren"], answer:1, explain:"Vroeg spelen voorkomt dat je naar de achterlijn wordt geduwd."}),
+      q=>({q:`Waarop letten bij inspelen?`, options:["Veel ballen naar het midden en kijk wat hij kiest","Alleen serve oefenen","Volleys negeren","Alleen cross"], answer:0, explain:"Middenballen tonen welke kant de speler prefereren."}),
+    ]
+  }
+};
+
+/* --- Build 100-question pools per language --- */
+function buildPool(lang) {
+  const L = TEMPLATES[lang];
+  const pool = [];
+  let idx = 0;
+  while(pool.length < 100 && idx < 2000){
+    const tFn = L.templates[idx % L.templates.length];
+    const ctx = {
+      players: shuffle([...L.players]).slice(0,3),
+      tactics: shuffle([...L.tactics]).slice(0,3),
+      fundamentals: shuffle([...L.fundamentals]).slice(0,3)
+    };
+    const item = tFn(ctx);
+    // ensure unique q
+    if(!pool.find(p=>p.q === item.q)){
+      // normalize item: q, options (array), answer (index), explain (string)
+      pool.push({q:item.q, options:item.options, answer:item.answer, explain:item.explain || ""});
+    }
+    idx++;
+  }
+  return shuffle(pool);
+}
+
+/* -------------------------
+   App state
+--------------------------*/
+let LANG = 'en';
+let POOLS = {};
+let selectedQuestions = [];
+let currentIndex = 0;
+let selectedAnswers = [];
+let score = 0;
+const PAGE_SIZE = 20;
+
+/* DOM */
+const startBtn = document.getElementById('startBtn');
+const guideBtn = document.getElementById('guideBtn');
+const qNum = document.getElementById('qNum');
+const qText = document.getElementById('qText');
+const choicesEl = document.getElementById('choices');
+const quizCard = document.getElementById('quizCard');
+const introCard = document.getElementById('introCard');
+const progBar = document.getElementById('progBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resultCard = document.getElementById('resultCard');
+const scoreText = document.getElementById('scoreText');
+const feedback = document.getElementById('feedback');
+const retakeBtn = document.getElementById('retakeBtn');
+const reviewBtn = document.getElementById('reviewBtn');
+const exportBtn = document.getElementById('exportBtn');
+
+/* language buttons (both header and side) */
+document.querySelectorAll('.flag-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> {
+    const lang = btn.getAttribute('data-lang');
+    setLanguage(lang);
+  });
+});
+
+/* set language and update UI text */
+function setLanguage(lang){
+  LANG = lang;
+  // build pool lazily
+  if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+  const u = UI[LANG];
+  document.getElementById('mainTitle').textContent = u.mainTitle;
+  document.title = u.mainTitle;
+  document.getElementById('subtitle').textContent = u.subtitle;
+  document.getElementById('titlePart').textContent = u.mainTitle + " — ";
+  document.getElementById('titleSub').textContent = u.subtitle;
+  document.getElementById('lead').textContent = u.lead;
+  startBtn.textContent = u.start;
+  guideBtn.textContent = u.guide;
+  nextBtn.textContent = u.next;
+  prevBtn.textContent = u.prev;
+  retakeBtn.textContent = u.retake;
+  reviewBtn.textContent = u.review;
+  exportBtn.textContent = u.exportCsv;
+  document.getElementById('panelTitle').textContent = u.panelTitle;
+  document.getElementById('panelText').textContent = u.how;
+  // visual flag opacity
+  document.querySelectorAll('.flag-btn').forEach(b=>b.style.opacity = b.getAttribute('data-lang')===LANG? '1' : '0.6');
+  // reset view
+  introCard.style.display='block';
+  quizCard.style.display='none';
+  resultCard.style.display='none';
+  feedback.textContent='';
+}
+
+/* init default language */
+setLanguage('en');
+
+/* start quiz: select 20 unique random questions */
+function startQuiz(){
+  const pool = POOLS[LANG] || (POOLS[LANG]=buildPool(LANG));
+  selectedQuestions = shuffle(pool).slice(0,PAGE_SIZE);
+  currentIndex = 0;
+  selectedAnswers = Array(PAGE_SIZE).fill(null);
+  score = 0;
+  introCard.style.display='none';
+  resultCard.style.display='none';
+  quizCard.style.display='block';
+  renderQuestion();
+  updateButtons();
+  updateProgress();
+}
+
+/* render question */
+function renderQuestion(){
+  const item = selectedQuestions[currentIndex];
+  qNum.textContent = `${currentIndex+1} / ${PAGE_SIZE}`;
+  qText.textContent = item.q;
+  choicesEl.innerHTML = '';
+  item.options.forEach((opt, idx)=>{
+    const d = document.createElement('div');
+    d.className = 'choice';
+    if(selectedAnswers[currentIndex] === idx) d.classList.add('selected');
+    d.innerHTML = `<div class="label">${String.fromCharCode(65+idx)}. ${opt}</div><div class="meta"></div>`;
+    d.onclick = ()=> selectOption(idx);
+    choicesEl.appendChild(d);
+  });
+}
+
+/* select option */
+function selectOption(idx){
+  selectedAnswers[currentIndex] = idx;
+  Array.from(choicesEl.children).forEach((c,i)=> c.classList.toggle('selected', i===idx));
+  updateButtons();
+}
+
+/* navigation */
+prevBtn.addEventListener('click', ()=> {
+  if(currentIndex>0){ currentIndex--; renderQuestion(); updateButtons(); updateProgress(); }
+});
+nextBtn.addEventListener('click', ()=> {
+  if(selectedAnswers[currentIndex] === null){ alert(UI[LANG].selectPrompt || 'Choose an answer'); return; }
+  if(currentIndex < PAGE_SIZE-1){ currentIndex++; renderQuestion(); updateButtons(); updateProgress(); }
+  else finishQuiz();
+});
+function updateButtons(){
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.textContent = currentIndex === PAGE_SIZE-1 ? (UI[LANG].review || 'Finish') : UI[LANG].next;
+}
+function updateProgress(){
+  const pct = Math.round((currentIndex / PAGE_SIZE) * 100);
+  progBar.style.width = pct + '%';
+}
+
+/* finish quiz */
+function finishQuiz(){
+  score = 0;
+  selectedQuestions.forEach((q,i)=> { if(selectedAnswers[i] === q.answer) score++; });
+  scoreText.textContent = `${score} / ${PAGE_SIZE}`;
+  // level
+  let levelTxt = '';
+  if(score <= 4) levelTxt = LANG==='fr' ? 'Débutant' : LANG==='de' ? 'Anfänger' : LANG==='nl' ? 'Beginner' : 'Rookie';
+  else if(score <= 9) levelTxt = LANG==='fr' ? 'Stratège en formation' : LANG==='de' ? 'Taktiker in Ausbildung' : LANG==='nl' ? 'Strategie in opleiding' : 'Strategist in Training';
+  else if(score <= 15) levelTxt = LANG==='fr' ? 'Penseur tactique' : LANG==='de' ? 'Taktischer Denker' : LANG==='nl' ? 'Tactische denker' : 'Tactical Thinker';
+  else levelTxt = LANG==='fr' ? 'Maître du court' : LANG==='de' ? 'Meister des Courts' : LANG==='nl' ? 'Meester van het veld' : 'Master of the Court';
+  document.getElementById('levelInfo').innerHTML = `<div style="font-weight:800;color:var(--accent)">${levelTxt}</div><div class="small">${Math.round(score/PAGE_SIZE*100)}%</div>`;
+  const fb = {
+    en: ["Focus on basics: reduce errors and practice patterns.","You know basics — improve execution under pressure.","Strong tactical sense — sharpen timing.","Excellent tactical awareness — keep refining execution."],
+    fr: ["Travaille les bases : réduis les erreurs et répète les schémas.","Tu connais les principes ; travaille l’exécution sous pression.","Bonne lecture tactique ; peaufine la finition.","Excellente intelligence tactique ; continue le travail de match."],
+    de: ["Fokussiere die Grundlagen: Fehler reduzieren und Muster üben.","Du kennst die Grundlagen – arbeite an der Ausführung.","Gutes taktisches Verständnis – Timing verfeinern.","Ausgezeichnete taktische Awareness – weiter verfeinern."],
+    nl: ["Focus op basis: fouten verminderen en patronen oefenen.","Je kent de basis — werk aan uitvoering onder druk.","Sterk tactisch inzicht — verfijn timing.","Uitstekend tactisch inzicht — blijf verfijnen."]
+  };
+  feedback.textContent = fb[LANG][ Math.min(3, Math.floor(score / (PAGE_SIZE/4))) ];
+  quizCard.style.display='none';
+  resultCard.style.display='block';
+  progBar.style.width = '100%';
+}
+
+/* review: open a new window with per-question explanations and colored marks */
+function reviewAll(){
+  const reviewWin = window.open('', '_blank', 'width=900,height=800,scrollbars=yes');
+  const doc = reviewWin.document;
+  doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Review — ' + (UI[LANG].mainTitle) + '</title>');
+  doc.write('<style>body{font-family:Arial;padding:18px;background:#f7f9fc;color:#0b1224} .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7} .review-opt{padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center} .sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid #b08cff} .corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid #8dd39a} .wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid #f19b9b} .explain{margin-top:8px;padding-left:6px;font-size:14px;color:#0b1224} h2{margin-top:0}</style>');
+  doc.write('</head><body>');
+  doc.write('<h2>' + (UI[LANG].mainTitle) + ' — Review</h2>');
+  doc.write('<p><strong>' + (UI[LANG].resYourScore || 'Your Score') + ':</strong> ' + score + ' / ' + PAGE_SIZE + '</p>');
+  selectedQuestions.forEach((q,i)=>{
+    doc.write('<div class="review-q"><strong>' + (i+1) + '. ' + q.q + '</strong>');
+    q.options.forEach((opt,j)=>{
+      let cls = 'review-opt';
+      let mark = '';
+      if(j === q.answer){ cls += ' corr'; mark = '✅'; }
+      if(selectedAnswers[i] === j && j !== q.answer){ cls += ' wr'; mark = '❌'; }
+      if(selectedAnswers[i] === j){ cls += ' sel'; }
+      doc.write('<div class="' + cls + '">' + '<div>' + String.fromCharCode(65+j) + '. ' + opt + '</div><div style="font-weight:700">' + mark + '</div></div>');
+    });
+    if(q.explain){ doc.write('<div class="explain"><strong>Explanation:</strong> ' + q.explain + '</div>'); }
+    doc.write('</div>');
+  });
+  doc.write('</body></html>');
+  doc.close();
+}
+
+/* export CSV: includes timestamp, language, score, each question/selected/correct/explain */
+function exportCSV(){
+  const rows = [];
+  const header = ['timestamp','language','score','questionIndex','question','selectedIndex','selectedText','correctIndex','correctText','explanation'];
+  rows.push(header);
+  const ts = new Date().toISOString();
+  selectedQuestions.forEach((q,i)=>{
+    const selIdx = selectedAnswers[i] !== null ? selectedAnswers[i] : '';
+    const selText = selIdx !== '' ? q.options[selIdx] : '';
+    const corrIdx = q.answer;
+    const corrText = q.options[corrIdx];
+    rows.push([ts, LANG, score + '/' + PAGE_SIZE, i+1, q.q.replace(/[\n\r]+/g,' '), selIdx, selText.replace(/,/g,';'), corrIdx, corrText.replace(/,/g,';'), (q.explain || '').replace(/[\n\r]+/g,' ')]);
+  });
+  // convert to CSV
+  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tennis_iq_${LANG}_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(url);
+  a.remove();
+}
+
+/* hooks */
+startBtn.addEventListener('click', startQuiz);
+retakeBtn.addEventListener('click', startQuiz);
+reviewBtn.addEventListener('click', reviewAll);
+exportBtn.addEventListener('click', exportCSV);
+guideBtn.addEventListener('click', ()=> alert(UI[LANG].how));
+
+/* keyboard shortcuts */
+document.addEventListener('keydown', (e)=>{
+  if(quizCard.style.display==='block'){
+    if(['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key,10)-1;
+      const opts = document.querySelectorAll('.choice');
+      if(opts[idx]) selectOption(idx);
+    } else if(e.key === 'Enter'){
+      nextBtn.click();
+    }
+  }
+});
+
+/* ensure click selects properly */
+choicesEl.addEventListener('click', (e)=>{
+  let el = e.target;
+  while(el && !el.classList.contains('choice')) el = el.parentElement;
+  if(!el) return;
+  const nodes = Array.from(choicesEl.children);
+  const idx = nodes.indexOf(el);
+  if(idx>=0) selectOption(idx);
+});
+
+/* initialize first pool for default language */
+POOLS[LANG] = buildPool(LANG);
+</script>
+</body>
+</html>
