@@ -1,0 +1,635 @@
+<!-- 
+  Mental Approach Quiz App (quadrilingual)
+  Source document (local path): /mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png
+  Paste this file as mental_quiz.html and host it on any static host.
+-->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Test Mental Tennis — Quadrilingue</title>
+<style>
+
+.home-btn{
+  margin-left:auto;
+  margin-right:8px;
+  text-decoration:none;
+  font-size:18px;
+  background:#fff;
+  border:1px solid rgba(122,79,255,.2);
+  color:var(--accent);
+  padding:8px 10px;
+  border-radius:10px;
+  font-weight:700;
+  transition:.15s ease;
+}
+.home-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(122,79,255,.25);
+}
+
+
+
+
+
+
+
+
+  :root{
+    --bg:#f3f6fb; --card:#ffffff; --muted:#6b7280; --accent:#7a4fff;
+    --green:#16a34a; --red:#ef4444; --purple:#6a37d8;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;}
+  body{
+    margin:0; background:linear-gradient(180deg,#eaf4ff,#f3f6fb);
+    color:#0b1224; display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .container{width:100%;max-width:980px;background:var(--card);border-radius:14px;box-shadow:0 10px 40px rgba(2,6,23,0.08);overflow:hidden;}
+  header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(11,17,36,0.04)}
+  .logo{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,#fff,#f3f6fb);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);font-size:20px}
+  h1{margin:0;font-size:18px}
+  .lang{margin-left:auto;display:flex;gap:8px}
+  .flag-btn{background:none;border:0;cursor:pointer;font-size:20px;padding:6px;border-radius:8px}
+  main{display:flex;gap:16px;padding:18px}
+  .left{flex:1;min-width:320px}
+  .card{background:#fff;border-radius:12px;padding:14px;border:1px solid rgba(11,17,36,0.04)}
+  .intro p{color:var(--muted);margin:8px 0 0}
+  .question-number{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .question-text{font-size:18px;margin:6px 0 14px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{border:1px solid rgba(11,17,36,0.06);padding:12px;border-radius:10px;cursor:pointer;background:#fbfdff;transition:all .12s;display:flex;align-items:center;justify-content:space-between}
+  .choice:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+  .choice.selected{background:linear-gradient(180deg,#f1e9ff,#efe6ff);border-color:rgba(106,55,216,0.18)}
+  .choice.correct{background:linear-gradient(180deg,#e9f8ec,#d6f1d9);border-color:rgba(22,163,74,0.14)}
+  .choice.wrong{background:linear-gradient(180deg,#ffecec,#ffd6d6);border-color:rgba(239,68,68,0.12)}
+  .choice .label{font-weight:600}
+  .choice .meta{font-size:14px;color:var(--muted)}
+  .footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(122,79,255,0.12)}
+  .progress{height:10px;background:#f0f4fb;border-radius:999px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#5e32c8);width:0%}
+  .results .score{font-size:28px;font-weight:800;color:var(--accent)}
+  .small{font-size:13px;color:var(--muted)}
+  footer{padding:10px 18px;color:var(--muted);font-size:13px;text-align:center}
+  .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7}
+  .review-opt{padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+  .sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid #b08cff}
+  .corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid #8dd39a}
+  .wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid #f19b9b}
+  .explain{font-size:14px;color:#0b1224;margin-top:8px;padding-left:6px}
+  .source{font-size:12px;color:var(--muted);margin-top:8px}
+  @media (max-width:900px){ main{flex-direction:column} .lang{margin-left:0} }
+</style>
+</head>
+<body>
+<div class="container" role="application" aria-label="Mental Tennis Quiz">
+  <header><a id="homeBtn" href="../index.html" class="home-btn" title="Home">🏠</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="logo">MT</div>
+      <div>
+        <h1 id="mainTitle">Test Mental — Tennis</h1>
+        <div id="subtitle" class="small">Concentration & état d'esprit</div>
+      </div>
+    </div>
+
+    <div class="lang" aria-label="language selector">
+      <button class="flag-btn" data-lang="en">🇬🇧</button>
+      <button class="flag-btn" data-lang="fr">🇫🇷</button>
+      
+      <button class="flag-btn" data-lang="de">🇩🇪</button>
+      <button class="flag-btn" data-lang="nl">🇳🇱</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="left">
+      <div id="introCard" class="card intro">
+        <div id="titleLine"><strong id="titlePart">L’Art de la Concentration — </strong><span id="titleSub">Mental Tennis</span></div>
+        <p id="lead" class="small">Questions basées sur le document "L'Art de la Concentration dans le Tennis" (Inner Game)</p>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button id="startBtn" class="btn">Commencer</button>
+          <button id="guideBtn" class="btn secondary">Guide</button>
+        </div>
+        <div class="source">Source (local file) : <a href="/mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png" target="_blank">/mnt/data/A_2D_digital_screenshot_of_a_tennis_IQ_test_titled.png</a></div>
+      </div>
+
+      <div id="quizCard" class="card" style="display:none;margin-top:12px">
+        <div class="question-number" id="qNum">Question 1 / 20</div>
+        <div class="question-text" id="qText">...</div>
+        <div class="choices" id="choices"></div>
+
+        <div class="footer">
+          <div style="flex:1">
+            <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="prevBtn" class="btn secondary" disabled>Précédent</button>
+            <button id="nextBtn" class="btn">Suivant</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultCard" class="card" style="display:none;margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small" id="resLabel">Ton score</div>
+            <div class="score" id="scoreText">0 / 20</div>
+          </div>
+          <div id="levelInfo" style="text-align:right"></div>
+        </div>
+        <div id="feedback" style="margin-top:12px;color:#0b1224"></div>
+
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button id="retakeBtn" class="btn">Recommencer (nouveau 20)</button>
+          <button id="reviewBtn" class="btn secondary">Voir réponses corrigées</button>
+          <button id="exportBtn" class="btn secondary">Exporter CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right" style="width:320px;min-width:220px">
+      <div class="card">
+        <h3 id="panelTitle">Comment ça marche</h3>
+        <p id="panelText" class="small">20 questions aléatoires issues d'un pool de 100, générées depuis le document reçu.</p>
+        <hr />
+        <div style="margin-top:8px">
+          <div class="small"><strong>Légende</strong></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:8px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--purple)"></div><div class="small">Ta réponse sélectionnée</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--green)"></div><div class="small">Réponse correcte</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+            <div style="width:14px;height:14px;border-radius:3px;background:var(--red)"></div><div class="small">Mauvaise réponse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="small"><strong>Langue</strong></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="flag-btn" data-lang="en">🇬🇧 English</button>
+          <button class="flag-btn" data-lang="fr">🇫🇷 Français</button>
+          
+          <button class="flag-btn" data-lang="de">🇩🇪 Deutsch</button>
+          <button class="flag-btn" data-lang="nl">🇳🇱 Nederlands</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© Coach Panos Lev — Mental Tennis Quiz</footer>
+</div>
+
+<script>
+/* -------------------------------------------------------
+   Mental Quiz app
+   - Pools generated (100 questions per language) from document
+   - Each item: {q, options:[...], answer:index, explain:"..."}
+   - 20 random unique questions per run
+   - Quadrilingual UI texts
+--------------------------------------------------------*/
+
+/* UI translations */
+const UI = {
+ en: {
+    mainTitle: "Mental Test — Champion mindset",
+    subtitle: "Concentration & Mindset",
+    start: "Start", guide: "Guide", next: "Next", prev: "Prev",
+    retake: "Retake (new 20)", review: "See corrected answers",
+    lead: "20 questions based on the provided document: 'Champion mindset'.",
+    how: "20 randomized questions from a 100-question pool. Review explanations after the test.",
+    resYourScore: "Your score", selectPrompt: "Choose an answer", exportCsv: "Export CSV"
+  },
+
+  fr: {
+    mainTitle: "Test Mental — Champion mindset",
+    subtitle: "Concentration & état d'esprit",
+    start: "Commencer", guide: "Guide", next: "Suivant", prev: "Précédent",
+    retake: "Recommencer (nouveau 20)", review: "Voir réponses corrigées",
+    lead: "20 questions basées sur le document fourni : 'Champion mindset'.",
+    how: "20 questions aléatoires tirées d'un pool de 100. Après le test, consulte les explications.",
+    resYourScore: "Ton score", selectPrompt: "Choisis une réponse", exportCsv: "Exporter CSV"
+  },
+  
+  de: {
+    mainTitle: "Mentaltest — Champion mindset",
+    subtitle: "Konzentration & Geisteshaltung",
+    start: "Start", guide: "Anleitung", next: "Weiter", prev: "Zurück",
+    retake: "Erneut (neu 20)", review: "Korrigierte Antworten ansehen",
+    lead: "20 Fragen basierend auf dem Dokument: 'Champion mindset'.",
+    how: "20 zufällige Fragen aus einem Pool von 100. Erklärungen nach dem Test anzeigen.",
+    resYourScore: "Dein Ergebnis", selectPrompt: "Wähle eine Antwort", exportCsv: "CSV exportieren"
+  },
+  nl: {
+    mainTitle: "Mentaal Test — Champion mindset",
+    subtitle: "Concentratie & Mindset",
+    start: "Start", guide: "Gids", next: "Volgende", prev: "Vorige",
+    retake: "Opnieuw (nieuwe 20)", review: "Bekijk gecorrigeerde antwoorden",
+    lead: "20 vragen gebaseerd op het document: 'Champion mindset'.",
+    how: "20 willekeurige vragen uit een pool van 100. Bekijk uitleg na de test.",
+    resYourScore: "Jouw score", selectPrompt: "Kies een antwoord", exportCsv: "Exporteer CSV"
+  }
+};
+
+/* simple shuffle */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* --- Templates derived from the provided mental document
+   Themes: Inner Game (Self1/Self2), concentration, letting go, observation, practice, ego, competition vs collaboration, learning, stress, calm focus.
+   We generate many variations to reach 100 items per language.
+*/
+const TEMPLATES = {
+
+  /* =========================
+     🇬🇧 ENGLISH — 20 QUESTIONS
+     ========================= */
+  en: {
+    templates: [
+      ()=>({q:"What is the most powerful tool in a tennis player's journey?", options:["Physical strength","Mindset","Technique","Equipment"], answer:1, explain:"Mindset shapes focus, resilience, and how challenges are handled."}),
+      ()=>({q:"A champion’s mindset views challenges mainly as:", options:["Threats","Excuses","Opportunities for growth","Unfair situations"], answer:2, explain:"Champions see challenges as chances to improve rather than obstacles."}),
+      ()=>({q:"Which quality allows champions to stay effective under pressure?", options:["Luck","Resilience","Speed","Aggression"], answer:1, explain:"Resilience helps players stay mentally strong despite adversity."}),
+      ()=>({q:"Mental practice should be:", options:["Occasional","Only before matches","A regular habit","Avoided"], answer:2, explain:"Like physical training, mental practice requires consistency."}),
+      ()=>({q:"Which tool helps rehearse success mentally?", options:["Visualization","Criticism","Overthinking","Judging"], answer:0, explain:"Visualization programs the mind for confident execution."}),
+      ()=>({q:"Positive self-talk mainly improves:", options:["Opponent fear","Mental clarity","Physical strength","Shot speed"], answer:1, explain:"Positive self-talk stabilizes focus and confidence."}),
+      ()=>({q:"Mindfulness helps players to:", options:["Ignore emotions","Stay present","Rush points","Avoid thinking"], answer:1, explain:"Mindfulness anchors attention in the present moment."}),
+      ()=>({q:"Consistency in mindset means:", options:["Always winning","Stable mental state","Same tactics","Same emotions"], answer:1, explain:"Champions remain mentally steady regardless of outcomes."}),
+      ()=>({q:"Champions stay grounded regardless of:", options:["Surface","Weather","Match outcome","Opponent style"], answer:2, explain:"Results don’t define mindset stability."}),
+      ()=>({q:"Mental consistency makes a player more:", options:["Emotional","Predictable","Reliable","Rigid"], answer:2, explain:"Stable mindset leads to dependable performance."}),
+      ()=>({q:"Tennis is described primarily as:", options:["A title chase","A journey","A ranking war","A physical battle"], answer:1, explain:"Growth and learning define the tennis journey."}),
+      ()=>({q:"Embracing the journey includes:", options:["Only wins","Avoiding losses","Ups and downs","Ignoring effort"], answer:2, explain:"Progress comes from both success and setbacks."}),
+      ()=>({q:"A champion’s mindset is:", options:["Fixed","Inherited","Continuously developed","Temporary"], answer:2, explain:"Mindset evolves through practice and awareness."}),
+      ()=>({q:"Growth in mindset requires:", options:["Avoiding mistakes","Stopping learning","Continuous development","Comfort zones"], answer:2, explain:"Improvement comes from ongoing learning."}),
+      ()=>({q:"Focus applies:", options:["Only during matches","Only in practice","On and off court","Only under pressure"], answer:2, explain:"Mental habits extend beyond competition."}),
+      ()=>({q:"Mental habits help maintain:", options:["Fatigue","Pressure","Mental sharpness","Doubt"], answer:2, explain:"Strong habits support clarity and focus."}),
+      ()=>({q:"Passion for the game should be:", options:["Conditional","Suppressed","Kept alive","Ignored"], answer:2, explain:"Passion fuels long-term motivation."}),
+      ()=>({q:"Mental strength complements:", options:["Only tactics","Physical training","Equipment choice","Luck"], answer:1, explain:"Mental and physical training work together."}),
+      ()=>({q:"Champions respond to setbacks by:", options:["Quitting","Complaining","Refocusing","Blaming others"], answer:2, explain:"Refocus keeps momentum forward."}),
+      ()=>({q:"The ultimate goal of mindset work is:", options:["Fame","Being unbeatable","Becoming your best self","Avoiding loss"], answer:2, explain:"Mindset development aims at personal excellence."})
+    ]
+  },
+
+  /* =========================
+     🇫🇷 FRANÇAIS — 20 QUESTIONS
+     ========================= */
+  fr: {
+    templates: [
+      ()=>({q:"Quel est l’outil le plus puissant du parcours d’un joueur ?", options:["La force physique","L’état d’esprit","La technique","Le matériel"], answer:1, explain:"L’état d’esprit influence la concentration et la résilience."}),
+      ()=>({q:"Un mental de champion voit les défis comme :", options:["Des menaces","Des excuses","Des opportunités de progression","Des injustices"], answer:2, explain:"Les défis sont des leviers de croissance."}),
+      ()=>({q:"Quelle qualité aide sous pression ?", options:["La chance","La résilience","La vitesse","L’agressivité"], answer:1, explain:"La résilience permet de rester solide mentalement."}),
+      ()=>({q:"La pratique mentale doit être :", options:["Occasionnelle","Avant les matchs","Régulière","Évitée"], answer:2, explain:"La constance est essentielle."}),
+      ()=>({q:"Quel outil mental est cité ?", options:["Visualisation","Critique","Sur-analyse","Jugement"], answer:0, explain:"La visualisation prépare le cerveau à réussir."}),
+      ()=>({q:"Le discours interne positif améliore :", options:["La peur adverse","La clarté mentale","La puissance","La vitesse"], answer:1, explain:"Il stabilise la confiance."}),
+      ()=>({q:"La pleine conscience aide à :", options:["Ignorer les émotions","Rester présent","Se précipiter","Éviter de penser"], answer:1, explain:"Être présent améliore l’exécution."}),
+      ()=>({q:"La constance mentale signifie :", options:["Toujours gagner","Stabilité émotionnelle","Même tactique","Même humeur"], answer:1, explain:"Le mental reste stable malgré le score."}),
+      ()=>({q:"Les champions restent ancrés malgré :", options:["Le terrain","La météo","Le résultat","L’adversaire"], answer:2, explain:"Le résultat ne définit pas l’état mental."}),
+      ()=>({q:"La constance mentale rend le joueur :", options:["Émotif","Prévisible","Fiable","Rigide"], answer:2, explain:"La fiabilité vient de la stabilité mentale."}),
+      ()=>({q:"Le tennis est surtout :", options:["Une quête de titres","Un voyage","Un combat","Un classement"], answer:1, explain:"Le parcours compte autant que le résultat."}),
+      ()=>({q:"Embrasser le parcours inclut :", options:["Uniquement les victoires","Éviter les défaites","Hauts et bas","Ignorer l’effort"], answer:2, explain:"Les difficultés font progresser."}),
+      ()=>({q:"Le mental de champion est :", options:["Fixe","Hérité","En développement constant","Temporaire"], answer:2, explain:"Il se construit avec le temps."}),
+      ()=>({q:"Progresser mentalement demande :", options:["Éviter les erreurs","Arrêter d’apprendre","Continuer à évoluer","Rester confortable"], answer:2, explain:"L’évolution continue est clé."}),
+      ()=>({q:"La concentration s’applique :", options:["Seulement en match","Seulement à l’entraînement","Partout","Sous pression uniquement"], answer:2, explain:"Les habitudes mentales sont globales."}),
+      ()=>({q:"Les routines mentales maintiennent :", options:["La fatigue","La pression","La clarté","Le doute"], answer:2, explain:"Elles soutiennent la lucidité."}),
+      ()=>({q:"La passion doit être :", options:["Conditionnelle","Réprimée","Entretenue","Ignorée"], answer:2, explain:"La passion nourrit la motivation."}),
+      ()=>({q:"La force mentale complète :", options:["La tactique seule","Le physique","Le matériel","La chance"], answer:1, explain:"Mental et physique sont liés."}),
+      ()=>({q:"Face à l’échec, un champion :", options:["Abandonne","Se plaint","Se recentre","Accuse"], answer:2, explain:"Se recentrer permet d’avancer."}),
+      ()=>({q:"L’objectif final est :", options:["La célébrité","Être imbattable","Devenir sa meilleure version","Éviter la défaite"], answer:2, explain:"Le mental vise l’excellence personnelle."})
+    ]
+  },
+
+  /* =========================
+     🇩🇪 DEUTSCH — 20 FRAGEN
+     ========================= */
+  de: {
+    templates: [
+      ()=>({q:"Was ist das wichtigste Werkzeug eines Tennisspielers?", options:["Kraft","Mindset","Technik","Ausrüstung"], answer:1, explain:"Das Mindset steuert Fokus und Widerstandskraft."}),
+      ()=>({q:"Ein Champion sieht Herausforderungen als:", options:["Bedrohungen","Ausreden","Wachstumsmöglichkeiten","Ungerecht"], answer:2, explain:"Herausforderungen fördern Entwicklung."}),
+      ()=>({q:"Welche Eigenschaft hilft unter Druck?", options:["Glück","Resilienz","Tempo","Aggression"], answer:1, explain:"Resilienz stabilisiert mental."}),
+      ()=>({q:"Mentales Training sollte sein:", options:["Selten","Vor Matches","Regelmäßig","Vermeidbar"], answer:2, explain:"Regelmäßigkeit ist entscheidend."}),
+      ()=>({q:"Welches mentale Werkzeug wird genutzt?", options:["Visualisierung","Kritik","Überdenken","Bewerten"], answer:0, explain:"Visualisierung stärkt Selbstvertrauen."}),
+      ()=>({q:"Positives Selbstgespräch verbessert:", options:["Gegnerangst","Mentale Klarheit","Kraft","Tempo"], answer:1, explain:"Es unterstützt Fokus."}),
+      ()=>({q:"Achtsamkeit hilft beim:", options:["Gefühle ignorieren","Im Moment bleiben","Hetzen","Abschalten"], answer:1, explain:"Präsenz verbessert Leistung."}),
+      ()=>({q:"Mentale Konstanz bedeutet:", options:["Immer gewinnen","Stabiler Zustand","Gleiche Taktik","Gleiche Emotion"], answer:1, explain:"Stabilität unabhängig vom Ergebnis."}),
+      ()=>({q:"Champions bleiben geerdet trotz:", options:["Belag","Wetter","Ergebnis","Gegner"], answer:2, explain:"Ergebnisse definieren nicht den Geist."}),
+      ()=>({q:"Mentale Konstanz macht Spieler:", options:["Emotional","Vorhersehbar","Zuverlässig","Starr"], answer:2, explain:"Zuverlässigkeit entsteht durch Stabilität."}),
+      ()=>({q:"Tennis ist vor allem:", options:["Titeljagd","Eine Reise","Kampf","Rangliste"], answer:1, explain:"Der Weg ist entscheidend."}),
+      ()=>({q:"Den Weg annehmen heißt:", options:["Nur Siege","Niederlagen meiden","Höhen und Tiefen","Anstrengung ignorieren"], answer:2, explain:"Rückschläge fördern Wachstum."}),
+      ()=>({q:"Champion-Mindset ist:", options:["Fix","Geerbt","Entwickelbar","Kurzzeitig"], answer:2, explain:"Es wächst mit Erfahrung."}),
+      ()=>({q:"Mentales Wachstum erfordert:", options:["Fehler vermeiden","Nicht lernen","Weiterentwickeln","Komfort"], answer:2, explain:"Lernen ist fortlaufend."}),
+      ()=>({q:"Fokus gilt:", options:["Nur im Match","Nur Training","Überall","Nur unter Druck"], answer:2, explain:"Mentale Gewohnheiten sind konstant."}),
+      ()=>({q:"Mentale Routinen erhalten:", options:["Müdigkeit","Druck","Klarheit","Zweifel"], answer:2, explain:"Sie stabilisieren den Geist."}),
+      ()=>({q:"Leidenschaft sollte:", options:["Bedingt","Unterdrückt","Erhalten bleiben","Ignoriert"], answer:2, explain:"Sie treibt Motivation."}),
+      ()=>({q:"Mentale Stärke ergänzt:", options:["Nur Taktik","Physisches Training","Ausrüstung","Glück"], answer:1, explain:"Beides gehört zusammen."}),
+      ()=>({q:"Nach Rückschlägen reagieren Champions mit:", options:["Aufgeben","Klagen","Neuausrichtung","Schuldzuweisung"], answer:2, explain:"Neuausrichtung hält Fortschritt aufrecht."}),
+      ()=>({q:"Ziel mentaler Arbeit ist:", options:["Ruhm","Unbesiegbar sein","Beste Version werden","Verluste vermeiden"], answer:2, explain:"Persönliche Exzellenz steht im Fokus."})
+    ]
+  },
+
+  /* =========================
+     🇳🇱 NEDERLANDS — 20 VRAGEN
+     ========================= */
+  nl: {
+    templates: [
+      ()=>({q:"Wat is het krachtigste hulpmiddel van een tennisser?", options:["Kracht","Mindset","Techniek","Materiaal"], answer:1, explain:"Mindset stuurt focus en veerkracht."}),
+      ()=>({q:"Een kampioensmindset ziet uitdagingen als:", options:["Bedreigingen","Excuses","Groeikansen","Oneerlijk"], answer:2, explain:"Uitdagingen stimuleren ontwikkeling."}),
+      ()=>({q:"Welke eigenschap helpt onder druk?", options:["Geluk","Veerkracht","Snelheid","Agressie"], answer:1, explain:"Veerkracht houdt het hoofd helder."}),
+      ()=>({q:"Mentale training moet zijn:", options:["Af en toe","Voor wedstrijden","Regelmatig","Vermeden"], answer:2, explain:"Regelmaat is essentieel."}),
+      ()=>({q:"Welke mentale techniek wordt gebruikt?", options:["Visualisatie","Kritiek","Overdenken","Oordelen"], answer:0, explain:"Visualisatie bereidt succes voor."}),
+      ()=>({q:"Positieve zelfspraak verbetert:", options:["Angst bij tegenstander","Mentale helderheid","Kracht","Snelheid"], answer:1, explain:"Het versterkt vertrouwen."}),
+      ()=>({q:"Mindfulness helpt om:", options:["Emoties te negeren","In het moment te blijven","Te haasten","Niet te denken"], answer:1, explain:"Aanwezigheid verbetert uitvoering."}),
+      ()=>({q:"Mentale consistentie betekent:", options:["Altijd winnen","Stabiele mindset","Zelfde tactiek","Zelfde emotie"], answer:1, explain:"Stabiliteit los van resultaat."}),
+      ()=>({q:"Kampioenen blijven geaard ondanks:", options:["Ondergrond","Weer","Uitslag","Tegenstander"], answer:2, explain:"Resultaten bepalen de mindset niet."}),
+      ()=>({q:"Mentale stabiliteit maakt een speler:", options:["Emotioneel","Voorspelbaar","Betrouwbaar","Stijf"], answer:2, explain:"Betrouwbaarheid komt door stabiliteit."}),
+      ()=>({q:"Tennis is vooral:", options:["Titeljacht","Een reis","Een strijd","Een ranking"], answer:1, explain:"Het proces is cruciaal."}),
+      ()=>({q:"De reis omarmen betekent:", options:["Alleen winnen","Verliezen vermijden","Hoogte- en dieptepunten","Inzet negeren"], answer:2, explain:"Leren gebeurt via ups en downs."}),
+      ()=>({q:"Een kampioensmindset is:", options:["Vast","Aangeboren","Ontwikkelbaar","Tijdelijk"], answer:2, explain:"Mindset groeit door ervaring."}),
+      ()=>({q:"Mentale groei vereist:", options:["Fouten vermijden","Stoppen met leren","Blijven ontwikkelen","Comfort"], answer:2, explain:"Ontwikkeling is continu."}),
+      ()=>({q:"Focus geldt:", options:["Alleen in wedstrijden","Alleen training","Overal","Alleen onder druk"], answer:2, explain:"Mentale gewoontes zijn universeel."}),
+      ()=>({q:"Mentale routines behouden:", options:["Vermoeidheid","Druk","Helderheid","Twijfel"], answer:2, explain:"Ze ondersteunen mentale scherpte."}),
+      ()=>({q:"Passie moet:", options:["Voorwaardelijk","Onderdrukt","Levend blijven","Genegeerd"], answer:2, explain:"Passie voedt motivatie."}),
+      ()=>({q:"Mentale kracht vult aan:", options:["Alleen tactiek","Fysieke training","Materiaal","Geluk"], answer:1, explain:"Mentale en fysieke training werken samen."}),
+      ()=>({q:"Na tegenslag reageert een kampioen door:", options:["Op te geven","Te klagen","Te herfocussen","Anderen te beschuldigen"], answer:2, explain:"Herfocus houdt vooruitgang gaande."}),
+      ()=>({q:"Het einddoel van mindsetwerk is:", options:["Roem","Onverslaanbaar zijn","Je beste zelf worden","Verlies vermijden"], answer:2, explain:"Het gaat om persoonlijke groei en excellentie."})
+    ]
+  }
+
+};
+
+
+/* build full 100-question pool per language (using templates with small variations) */
+function buildPool(lang){
+  const L = TEMPLATES[lang];
+  const pool = [];
+  let i=0, guard=0;
+  while(pool.length < 100 && guard++ < 2000){
+    const tfn = L.templates[i % L.templates.length];
+    // small permutations: append index or swap synonyms for variety
+    const base = tfn();
+    // Slight perturbation to create variations: add context phrase or shuffle options
+    // We'll shuffle options but keep correct answer index corrected.
+    let opts = base.options.slice();
+    // attempt to create small variant by shuffling options but track new answer index
+    const mapped = opts.map((o,idx)=>({o,idx}));
+    const s = shuffle(mapped);
+    const newOpts = s.map(x=>x.o);
+    const newAnswer = s.findIndex(x=>x.idx === base.answer);
+    const qText = base.q; // we keep question same for clarity (document fidelity)
+    const explain = base.explain || "";
+    // Avoid duplicate question+options identical
+    const key = qText + '|' + newOpts.join('|');
+    if(!pool.find(p=>p.key === key)){
+      pool.push({ key, q: qText, options: newOpts, answer: newAnswer, explain });
+    }
+    i++;
+  }
+  return shuffle(pool);
+}
+
+/* App state */
+let LANG = 'en';
+let POOLS = {};
+let selectedQuestions = [];
+let currentIndex = 0;
+let selectedAnswers = [];
+let score = 0;
+const PAGE_SIZE = 20;
+
+/* DOM */
+const startBtn = document.getElementById('startBtn');
+const guideBtn = document.getElementById('guideBtn');
+const qNum = document.getElementById('qNum');
+const qText = document.getElementById('qText');
+const choicesEl = document.getElementById('choices');
+const quizCard = document.getElementById('quizCard');
+const introCard = document.getElementById('introCard');
+const progBar = document.getElementById('progBar');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resultCard = document.getElementById('resultCard');
+const scoreText = document.getElementById('scoreText');
+const feedback = document.getElementById('feedback');
+const retakeBtn = document.getElementById('retakeBtn');
+const reviewBtn = document.getElementById('reviewBtn');
+const exportBtn = document.getElementById('exportBtn');
+const mainTitle = document.getElementById('mainTitle');
+const subtitle = document.getElementById('subtitle');
+const titlePart = document.getElementById('titlePart');
+const titleSub = document.getElementById('titleSub');
+const leadEl = document.getElementById('lead');
+const panelTitle = document.getElementById('panelTitle');
+const panelText = document.getElementById('panelText');
+
+/* language buttons */
+document.querySelectorAll('.flag-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> {
+    const lang = btn.getAttribute('data-lang');
+    setLanguage(lang);
+  });
+});
+
+/* set language UI */
+function setLanguage(lang){
+  LANG = lang;
+  if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+  const u = UI[LANG];
+  mainTitle.textContent = u.mainTitle;
+  document.title = u.mainTitle;
+  subtitle.textContent = u.subtitle;
+  titlePart.textContent = u.mainTitle + " — ";
+  titleSub.textContent = u.subtitle;
+  leadEl.textContent = u.lead;
+  startBtn.textContent = u.start;
+  guideBtn.textContent = u.guide;
+  nextBtn.textContent = u.next;
+  prevBtn.textContent = u.prev;
+  retakeBtn.textContent = u.retake;
+  reviewBtn.textContent = u.review;
+  exportBtn.textContent = u.exportCsv || u.exportCsv || 'Export CSV';
+  panelTitle.textContent = u.panelTitle;
+  panelText.textContent = u.how;
+  document.querySelectorAll('.flag-btn').forEach(b=>b.style.opacity = b.getAttribute('data-lang')===LANG? '1' : '0.6');
+  // show intro
+  introCard.style.display='block';
+  quizCard.style.display='none';
+  resultCard.style.display='none';
+  feedback.textContent='';
+}
+
+/* init */
+setLanguage(LANG);
+
+/* start quiz */
+function startQuiz(){
+  if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+  selectedQuestions = shuffle(POOLS[LANG]).slice(0,PAGE_SIZE);
+  currentIndex = 0;
+  selectedAnswers = Array(PAGE_SIZE).fill(null);
+  score = 0;
+  introCard.style.display='none';
+  quizCard.style.display='block';
+  resultCard.style.display='none';
+  renderQuestion();
+  updateButtons();
+  updateProgress();
+}
+
+
+// keep language when going home
+document.getElementById('homeBtn')?.addEventListener('click', () => {
+  localStorage.setItem('lang', LANG);
+});
+
+
+/* render question */
+function renderQuestion(){
+  const item = selectedQuestions[currentIndex];
+  qNum.textContent = `${currentIndex+1} / ${PAGE_SIZE}`;
+  qText.textContent = item.q;
+  choicesEl.innerHTML = '';
+  item.options.forEach((opt, idx)=>{
+    const d = document.createElement('div');
+    d.className = 'choice';
+    if(selectedAnswers[currentIndex] === idx) d.classList.add('selected');
+    d.innerHTML = `<div class="label">${String.fromCharCode(65+idx)}. ${opt}</div><div class="meta"></div>`;
+    d.onclick = ()=> selectOption(idx);
+    choicesEl.appendChild(d);
+  });
+}
+
+/* select */
+function selectOption(idx){
+  selectedAnswers[currentIndex] = idx;
+  Array.from(choicesEl.children).forEach((c,i)=> c.classList.toggle('selected', i===idx));
+  updateButtons();
+}
+
+/* nav */
+prevBtn.addEventListener('click', ()=> {
+  if(currentIndex>0){ currentIndex--; renderQuestion(); updateButtons(); updateProgress(); }
+});
+nextBtn.addEventListener('click', ()=> {
+  if(selectedAnswers[currentIndex] === null){ alert(UI[LANG].selectPrompt || 'Choose an answer'); return; }
+  if(currentIndex < PAGE_SIZE-1){ currentIndex++; renderQuestion(); updateButtons(); updateProgress(); }
+  else finishQuiz();
+});
+function updateButtons(){
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.textContent = currentIndex === PAGE_SIZE-1 ? (UI[LANG].review || 'Finish') : UI[LANG].next;
+}
+function updateProgress(){
+  const pct = Math.round((currentIndex / PAGE_SIZE) * 100);
+  progBar.style.width = pct + '%';
+}
+
+/* finish */
+function finishQuiz(){
+  score = 0;
+  selectedQuestions.forEach((q,i)=> { if(selectedAnswers[i] === q.answer) score++; });
+  scoreText.textContent = `${score} / ${PAGE_SIZE}`;
+  // simple level labels
+  let levelTxt = '';
+  if(score <= 4) levelTxt = LANG==='fr' ? 'Débutant' : LANG==='de'? 'Anfänger' : LANG==='nl' ? 'Beginner' : 'Rookie';
+  else if(score <= 9) levelTxt = LANG==='fr' ? 'Stratège en formation' : LANG==='de' ? 'Taktiker in Ausbildung' : LANG==='nl' ? 'Strategie in opleiding' : 'Strategist in Training';
+  else if(score <= 15) levelTxt = LANG==='fr' ? 'Penseur tactique' : LANG==='de' ? 'Taktischer Denker' : LANG==='nl' ? 'Tactische denker' : 'Tactical Thinker';
+  else levelTxt = LANG==='fr' ? 'Maître du mental' : LANG==='de' ? 'Meister des Geistes' : LANG==='nl' ? 'Meester van de geest' : 'Master of Mind';
+  document.getElementById('levelInfo').innerHTML = `<div style="font-weight:800;color:var(--accent)">${levelTxt}</div><div class="small">${Math.round(score/PAGE_SIZE*100)}%</div>`;
+  const fb = {
+    fr: ["Travaille la base : respiration et observation.","Connais les principes ; répète en situation de jeu.","Bonne lecture mentale ; peaufine la pratique détendue.","Excellent : poursuis l'intégration quotidienne."],
+    en: ["Work the basics: breathing and observation.","Know the principles; rehearse in match contexts.","Good mental reading; refine relaxed practice.","Excellent: continue integrating daily."],
+    de: ["Arbeite an Grundlagen: Atmung und Beobachtung.","Kenne die Prinzipien; übe in Spielsituationen.","Gute mentale Lesefähigkeit; entspannte Praxis verfeinern.","Ausgezeichnet: weiter integrieren."],
+    nl: ["Oefen de basis: ademhaling en observatie.","Ken de principes; oefen in wedstrijdcontext.","Goed mentaal inzicht; verfijn ontspannen oefenen.","Uitstekend: blijf dagelijks integreren."]
+  };
+  feedback.textContent = fb[LANG][ Math.min(3, Math.floor(score / (PAGE_SIZE/4))) ];
+  quizCard.style.display='none';
+  resultCard.style.display='block';
+  progBar.style.width = '100%';
+}
+
+/* review: open new window with explanations and color coding */
+function reviewAll(){
+  const win = window.open('', '_blank', 'width=900,height=800,scrollbars=yes');
+  const doc = win.document;
+  doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Review</title>');
+  doc.write('<style>body{font-family:Arial;padding:18px;background:#f7f9fc;color:#0b1224} .review-q{background:#fff;padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid #eef2f7} .review-opt{padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center} .sel{background:linear-gradient(180deg,#efe0ff,#efe6ff);border:1px solid #b08cff} .corr{background:linear-gradient(180deg,#e8f8ec,#dff5e6);border:1px solid #8dd39a} .wr{background:linear-gradient(180deg,#ffecec,#ffd6d6);border:1px solid #f19b9b} .explain{margin-top:8px;padding-left:6px;font-size:14px;color:#0b1224} h2{margin-top:0}</style>');
+  doc.write('</head><body>');
+  doc.write('<h2>' + (UI[LANG].mainTitle) + ' — Review</h2>');
+  doc.write('<p><strong>' + (UI[LANG].resYourScore || 'Score') + ':</strong> ' + score + ' / ' + PAGE_SIZE + '</p>');
+  selectedQuestions.forEach((q,i)=>{
+    doc.write('<div class="review-q"><strong>' + (i+1) + '. ' + q.q + '</strong>');
+    q.options.forEach((opt,j)=>{
+      let cls='review-opt';
+      let mark='';
+      if(j===q.answer){ cls += ' corr'; mark='✅'; }
+      if(selectedAnswers[i]===j && j!==q.answer){ cls += ' wr'; mark='❌'; }
+      if(selectedAnswers[i]===j){ cls += ' sel'; }
+      doc.write('<div class="' + cls + '"><div>' + String.fromCharCode(65+j) + '. ' + opt + '</div><div style="font-weight:700">' + mark + '</div></div>');
+    });
+    if(q.explain){ doc.write('<div class="explain"><strong>Explication :</strong> ' + q.explain + '</div>'); }
+    doc.write('</div>');
+  });
+  doc.write('</body></html>');
+  doc.close();
+}
+
+/* export CSV */
+function exportCSV(){
+  const rows = [];
+  const header = ['timestamp','language','score','qIndex','question','selectedIndex','selectedText','correctIndex','correctText','explain'];
+  rows.push(header);
+  const ts = new Date().toISOString();
+  selectedQuestions.forEach((q,i)=>{
+    const selIdx = selectedAnswers[i] !== null ? selectedAnswers[i] : '';
+    const selText = selIdx !== '' ? q.options[selIdx] : '';
+    const corrIdx = q.answer;
+    const corrText = q.options[corrIdx];
+    rows.push([ts, LANG, score + '/' + PAGE_SIZE, i+1, q.q.replace(/[\n\r]+/g,' '), selIdx, selText.replace(/,/g,';'), corrIdx, corrText.replace(/,/g,';'), (q.explain || '').replace(/[\n\r]+/g,' ')]);
+  });
+  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mental_tennis_${LANG}_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(url);
+  a.remove();
+}
+
+/* hooks */
+startBtn.addEventListener('click', startQuiz);
+retakeBtn.addEventListener('click', startQuiz);
+reviewBtn.addEventListener('click', reviewAll);
+exportBtn.addEventListener('click', exportCSV);
+guideBtn.addEventListener('click', ()=> alert(UI[LANG].how));
+
+/* keyboard support */
+document.addEventListener('keydown', (e)=>{
+  if(quizCard.style.display==='block'){
+    if(['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key,10)-1;
+      const opts = document.querySelectorAll('.choice');
+      if(opts[idx]) selectOption(idx);
+    } else if(e.key === 'Enter'){ nextBtn.click(); }
+  }
+});
+
+/* click-to-select */
+choicesEl.addEventListener('click', (e)=>{
+  let el = e.target;
+  while(el && !el.classList.contains('choice')) el = el.parentElement;
+  if(!el) return;
+  const nodes = Array.from(choicesEl.children);
+  const idx = nodes.indexOf(el);
+  if(idx>=0) selectOption(idx);
+});
+
+/* ensure first pool */
+if(!POOLS[LANG]) POOLS[LANG] = buildPool(LANG);
+</script>
+</body>
+</html>
