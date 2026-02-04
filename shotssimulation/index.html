@@ -120,6 +120,101 @@ button {
   margin-top: 6px;
   font-size: 13px;
 }
+
+
+/* =====================
+   RESPONSIVE LAYOUT
+===================== */
+
+/* Make canvas responsive */
+#court {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Main wrapper */
+#main {
+  max-width: 100%;
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  #main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #tactics {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .tactic-btn {
+    width: 45%;
+    margin: 5px;
+    text-align: center;
+  }
+
+  #panel {
+    width: 95%;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+  body {
+    padding: 5px;
+  }
+
+  #tactics {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .tactic-btn {
+    width: 100%;
+  }
+
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+
+  #panel {
+    width: 100%;
+  }
+
+  textarea {
+    height: 160px;
+    font-size: 13px;
+  }
+
+  button {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  /* Modal full screen on mobile */
+  #modal {
+    width: 95%;
+    height: 90%;
+    overflow-y: auto;
+  }
+
+  #modal img,
+  #modal iframe {
+    height: 50vh;
+  }
+}
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -519,6 +614,21 @@ function closeModal() {
   document.getElementById("modalOverlay").style.display = "none";
 }
 
+
+
+
+
+
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = rect.width / canvas.width;
+  const scaleY = rect.height / canvas.height;
+  ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
 
 
