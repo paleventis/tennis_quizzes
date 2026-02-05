@@ -6,6 +6,35 @@
 <title>Tennis IQ — Home</title>
 
 <style>
+
+.header-center{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+
+.title-wrapper{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+#title{
+  font-size:42px;          /* BIG title */
+  font-weight:800;
+  text-align:center;
+  letter-spacing:0.5px;
+}
+
+.ball{
+  font-size:36px;
+  line-height:1;
+}
+
+
+
+
 :root{
   --bg:#f3f6fb;
   --card:#ffffff;
@@ -66,8 +95,13 @@ footer{text-align:center;margin-top:24px;font-size:13px;color:var(--muted)}
 <body>
 <div class="container">
 
-<header>
-  <h1 id="title">Tennis IQ Platform</h1>
+<header class="header-center">
+  <div class="title-wrapper">
+    <span class="ball">🎾</span>
+    <h1 id="title">Tennis IQ Platform</h1>
+    <span class="ball">🎾</span>
+  </div>
+
   <div class="lang">
     <button data-lang="en" class="active">🇬🇧</button>
     <button data-lang="fr">🇫🇷</button>
